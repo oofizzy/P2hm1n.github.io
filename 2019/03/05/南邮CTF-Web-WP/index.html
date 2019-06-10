@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="南邮CTF的Web题…">
+<meta name="keywords" content="CTF,Writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="南邮CTF Web Writeup">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="南邮CTF的Web题…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/%E5%8D%97%E9%82%AECTF-Web-WP/2.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/%E5%8D%97%E9%82%AECTF-Web-WP/1.png">
+<meta property="og:updated_time" content="2019-06-07T06:12:50.562Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="南邮CTF Web Writeup">
+<meta name="twitter:description" content="南邮CTF的Web题…">
+<meta name="twitter:image" content="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/%E5%8D%97%E9%82%AECTF-Web-WP/2.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>南邮CTF Web Writeup | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">南邮CTF Web Writeup
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-05 22:49:45" itemprop="dateCreated datePublished" datetime="2019-03-05T22:49:45+08:00">2019-03-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-07 14:12:50" itemprop="dateModified" datetime="2019-06-07T14:12:50+08:00">2019-06-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>南邮CTF的Web题…</p>
+<a id="more"></a>
+<p><img src="%E5%8D%97%E9%82%AECTF-Web-WP/2.png" alt></p>
+<h1 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h1><ul>
+<li><p>F12查看页面源码</p>
+</li>
+<li><p>然后就可以看见flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="md5-collision"><a href="#md5-collision" class="headerlink" title="md5 collision"></a>md5 collision</h1><p><strong>分析代码：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$md51 = md5(<span class="string">'QNKCDZO'</span>);		<span class="comment">//将QNKCFZO经过md5加密，赋值给md51</span></span><br><span class="line">$a = @$_GET[<span class="string">'a'</span>];		<span class="comment">//GET传参</span></span><br><span class="line">$md52 = @md5($a);		<span class="comment">//经过md5加密的变量a赋值给md52</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($a))&#123;		<span class="comment">//判断是否设置变量a</span></span><br><span class="line"><span class="keyword">if</span> ($a != <span class="string">'QNKCDZO'</span> &amp;&amp; $md51 == $md52) &#123;	<span class="comment">//内层if语句判断变量a不等于QNKCDZO，且md51和md52相等</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"nctf&#123;*****************&#125;"</span>;		<span class="comment">//输出flag</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"false!!!"</span>;		<span class="comment">//否则输出"false"</span></span><br><span class="line">&#125;&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;<span class="keyword">echo</span> <span class="string">"please input a"</span>;&#125;	<span class="comment">//最外层if条件判断</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>php的弱类型比较，当两个值使用==进行比较时，只是比较变量的值，而不会去比较变量的类型…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="签到2"><a href="#签到2" class="headerlink" title="签到2"></a>签到2</h1><ul>
+<li><p>F12改maxlength属性</p>
+</li>
+<li><p>输入口令得到flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="这题不是WEB"><a href="#这题不是WEB" class="headerlink" title="这题不是WEB"></a>这题不是WEB</h1><ul>
+<li><p>不是Web…下载图片</p>
+</li>
+<li><p>暴力txt文档打开（或者使用winhex）</p>
+</li>
+<li><p>文档末端有flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="层层递进"><a href="#层层递进" class="headerlink" title="层层递进"></a>层层递进</h1><ul>
+<li><p>查看页面源代码（右键点击就ok了）</p>
+</li>
+<li><p>一直点链接，<code>&lt;iframe src=&quot;&quot;&gt;</code>,src属性里面的链接一直点。最后出现注释掉的文字</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Placed at the end of the document so the pages load faster --&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  </span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-n.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-c.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-t.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-f.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-&#123;.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-t.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-h.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-i.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-s.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-_.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-i.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-s.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-_.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-a.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-_.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-f.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-l.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-4.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-g.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">&lt;script src="./js/jquery-&#125;.7.2.min.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>每行在<code>./js/jquery-</code>之后的一个字符连接起来就是flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="AAencode"><a href="#AAencode" class="headerlink" title="AAencode"></a>AAencode</h1><ul>
+<li><p>什么是jjencode?</p>
+<ul>
+<li>将JS代码转换成只有符号的字符串</li>
+</ul>
+</li>
+<li><p>什么是aaencode？</p>
+<ul>
+<li>将JS代码转换成常用的网络表情。</li>
+</ul>
+</li>
+</ul>
+<br>
+- 浏览器 Unicode 解码
+
+<ul>
+<li><p>直接甩进控制台，报错<code>ReferenceError: ωﾟﾉ is not defined</code></p>
+</li>
+<li><p>继续定义 <code>ωﾟﾉ = &#39;&#39;</code>定义它为空</p>
+</li>
+<li><p>再次甩进控制台，弹窗得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="单身二十年"><a href="#单身二十年" class="headerlink" title="单身二十年"></a>单身二十年</h1><ul>
+<li><p>根据题目信息提示，开启 Burp Suite ，在url跳转处抓包。</p>
+</li>
+<li><p>甩进 Burp Suite 中的Repeater模块。</p>
+</li>
+<li><p>Go一下，得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="你从哪里来"><a href="#你从哪里来" class="headerlink" title="你从哪里来"></a>你从哪里来</h1><ul>
+<li><p>根据题目信息提示，开启 Burp Suite，直接抓包</p>
+</li>
+<li><p>改referer为 <code>https://www.google.com</code> 得flag…（但是这题我做的时候那边环境貌似挂掉了）</p>
+</li>
+<li><p>假装得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="php-decode"><a href="#php-decode" class="headerlink" title="php decode"></a>php decode</h1><p><strong>分析代码：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CLsI</span><span class="params">($ZzvSWE)</span> </span>&#123;	<span class="comment">//自定义函数</span></span><br><span class="line"></span><br><span class="line">    $ZzvSWE = gzinflate(base64_decode($ZzvSWE));	<span class="comment">//加密</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; strlen($ZzvSWE); $i++) &#123;	<span class="comment">//循环</span></span><br><span class="line"></span><br><span class="line">        $ZzvSWE[$i] = chr(ord($ZzvSWE[$i]) - <span class="number">1</span>);	<span class="comment">//ord()函数主要用来返回对应字符的ascii码，chr()主要用来表示ascii码对应的字符</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> $ZzvSWE;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//上面的函数就是一个加密过程，其实没太大用...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//题目中说到php跟shell。这里的eval跟php对不上</span></span><br><span class="line"><span class="keyword">eval</span>(CLsI(<span class="string">"+7DnQGFmYVZ+eoGmlg0fd3puUoZ1fkppek1GdVZhQnJSSZq5aUImGNQBAA=="</span>));<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将最后一排的 <code>eval</code> 换成<code>echo</code> 找个在线解码的网站，得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h1><ul>
+<li><strong>补充知识：</strong><ul>
+<li><a href="https://www.freebuf.com/column/148886.html" target="_blank" rel="noopener">php伪协议实现命令执行的七种姿势 </a></li>
+<li><a href="https://www.freebuf.com/column/183226.html" target="_blank" rel="noopener">ctf中关于php伪协议的考查 </a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>在 URL 跳转后，URL末端多了一个 <code>?file=show.php</code> ,这里的<code>file</code>是可控的,此题利用php的伪协议</p>
+</li>
+<li><p>在URL末端构造 <code>?file=php://filter/read=convert.base64-encode/resource=index.php</code>,弹回base64位加密后的文件</p>
+<ul>
+<li>php://filter/可用于处理打开的数据流，起到过滤作用。如果源文件为.php则很有可能在前台显示不出来。</li>
+<li>所以让文件转化为base64格式（convert.base64-encode）然后再输出，这样不论是什么格式的文件都可以在前台输出。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>base64解密，得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="单身一百年也没用"><a href="#单身一百年也没用" class="headerlink" title="单身一百年也没用"></a>单身一百年也没用</h1><ul>
+<li>通上题《单身二十年》</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="COOKIE"><a href="#COOKIE" class="headerlink" title="COOKIE"></a>COOKIE</h1><ul>
+<li><p>根据tips： 0==not ;那么进去直接F12，修改cookie值为1.</p>
+</li>
+<li><p>刷新页面得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a>MYSQL</h1><ul>
+<li><p>根据提示在 URL 后加上 <code>robots.txt</code>,看见一堆代码</p>
+</li>
+<li><p>分析源码</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>($_GET[id]) &#123;	<span class="comment">//get传参</span></span><br><span class="line">   mysql_connect(SAE_MYSQL_HOST_M . <span class="string">':'</span> . SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);</span><br><span class="line">  mysql_select_db(SAE_MYSQL_DB);</span><br><span class="line">  $id = intval($_GET[id]);	<span class="comment">//获取GET传来的变量的整数值，赋值给id变量</span></span><br><span class="line">  $query = @mysql_fetch_array(mysql_query(<span class="string">"select content from ctf2 where id='$id'"</span>));	<span class="comment">//查询语句</span></span><br><span class="line">  <span class="keyword">if</span> ($_GET[id]==<span class="number">1024</span>) &#123;	<span class="comment">//判断GET传参传进来的是否是1024</span></span><br><span class="line">      <span class="keyword">echo</span> <span class="string">"&lt;p&gt;no! try again&lt;/p&gt;"</span>;	<span class="comment">//输出</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span>($query[content]);	<span class="comment">//输出</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>代码逻辑通透，先访问题目中给出的 sql.php 然后传入一个float型的1024.0001，转成1024进入函数判断。得falg…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="sql-injection-3"><a href="#sql-injection-3" class="headerlink" title="sql injection 3"></a>sql injection 3</h1><ul>
+<li><p>进来看见一个查询语句 <code>your sql:select id,title from news where id = &#39;1&#39;</code> URL为 <code>?id=1</code></p>
+</li>
+<li><p>输入的<code>&#39;</code> 全都被转义，应该是考察宽字节注入 <code>%df&#39;</code> 完美绕过</p>
+</li>
+<li><p>经过漫长的注入，得到flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="x00"><a href="#x00" class="headerlink" title="/x00"></a>/x00</h1><ul>
+<li>分析源码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">view-source:</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> (<span class="keyword">isset</span> ($_GET[<span class="string">'nctf'</span>])) &#123;	<span class="comment">//判断</span></span><br><span class="line">       <span class="keyword">if</span> (@ereg (<span class="string">"^[1-9]+$"</span>, $_GET[<span class="string">'nctf'</span>]) === <span class="keyword">FALSE</span>)	<span class="comment">//匹配字符，正则：1-9的数字出现1到多次</span></span><br><span class="line">           <span class="keyword">echo</span> <span class="string">'必须输入数字才行'</span>;</span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span> (strpos ($_GET[<span class="string">'nctf'</span>], <span class="string">'#biubiubiu'</span>) !== <span class="keyword">FALSE</span>)  <span class="comment">//要出现 #biubiubiu 这串字符，才给flag</span></span><br><span class="line">           <span class="keyword">die</span>(<span class="string">'Flag: '</span>.$flag);</span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">           <span class="keyword">echo</span> <span class="string">'骚年，继续努力吧啊~'</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>if和 else if 中需要一个纯数字，但是还要出现<code>#biubiubiu</code>这个字符的</p>
+</li>
+<li><p><strong>多种解法：</strong></p>
+<ul>
+<li>方法一：<code>%00</code>截断 输入<code>nctf=1%00%23biubiubiu</code>,得flag…</li>
+<li>方法二：数组绕过，输入 <code>nctf[]=1</code> 即可绕过，第一个if是为空，绕过 FALSE（false与null还是有区别），第二个if，strpos（）处理不了数组,得flag…</li>
+</ul>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="bypass-again"><a href="#bypass-again" class="headerlink" title="bypass again"></a>bypass again</h1><ul>
+<li><p>tips是：弱类型。</p>
+</li>
+<li><p>分析源码：</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'a'</span>]) <span class="keyword">and</span> <span class="keyword">isset</span>($_GET[<span class="string">'b'</span>])) &#123;	<span class="comment">//判断是否设置变量</span></span><br><span class="line"><span class="keyword">if</span> ($_GET[<span class="string">'a'</span>] != $_GET[<span class="string">'b'</span>])	<span class="comment">//GET传入的a、b不能相等</span></span><br><span class="line"><span class="keyword">if</span> (md5($_GET[<span class="string">'a'</span>]) == md5($_GET[<span class="string">'b'</span>]))	<span class="comment">//md5加密过的a,b要一样</span></span><br><span class="line"><span class="keyword">die</span>(<span class="string">'Flag: '</span>.$flag);	<span class="comment">//flag</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'Wrong.'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>md5处理不了数组，传入<code>a[]=1&amp;&amp;b[]=2</code>，得到flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h1><ul>
+<li><p>网页打开是一个搜索框，点击下面的 source.php 选项，查看源码</p>
+</li>
+<li><p>分析源码</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="keyword">if</span> ($_SERVER[<span class="string">"REQUEST_METHOD"</span>] == <span class="string">"POST"</span>) <span class="comment">//判断是否为POST传参</span></span><br><span class="line">&#123;</span><br><span class="line">	extract($_POST);</span><br><span class="line">	<span class="keyword">if</span> ($pass == $thepassword_123)	<span class="comment">//判断是否相等</span></span><br><span class="line">	&#123; </span><br><span class="line">		<span class="keyword">echo</span> $theflag;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>extract()</code>函数的作用：<strong>从数组中</strong>将变量导入到当前的符号表，可以看到这里的代码为：<code>extract($_POST)</code>，即将POST的参数导入当前的符号表<ul>
+<li>方法一：<code>pass=1&amp;thepassword_123=1</code></li>
+<li>方法二：<code>pass[]=&amp;thepassword_123</code></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="PHP是世界上最好的语言"><a href="#PHP是世界上最好的语言" class="headerlink" title="PHP是世界上最好的语言"></a>PHP是世界上最好的语言</h1><ul>
+<li>分析源码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(eregi(<span class="string">"hackerDJ"</span>,$_GET[id])) &#123;	<span class="comment">//eregi()函数在一个字符串搜索指定的模式的字符串</span></span><br><span class="line">  <span class="keyword">echo</span>(<span class="string">"&lt;p&gt;not allowed!&lt;/p&gt;"</span>);</span><br><span class="line">  <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$_GET[id] = urldecode($_GET[id]);	<span class="comment">//编码GET传入的id值后赋值给id</span></span><br><span class="line"><span class="keyword">if</span>($_GET[id] == <span class="string">"hackerDJ"</span>)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">"&lt;p&gt;Access granted!&lt;/p&gt;"</span>;</span><br><span class="line">  <span class="keyword">echo</span> <span class="string">"&lt;p&gt;flag: *****************&#125; &lt;/p&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>因为浏览器会进行一次编码，所以这里二次编码即可。得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="伪装者"><a href="#伪装者" class="headerlink" title="伪装者"></a>伪装者</h1><ul>
+<li><strong>补充知识：</strong><ul>
+<li><code>$_SERVER[“HTTP_X_FORWARDED_FOR”]</code> 获得的值是HTTP中 X-Forwarded-For</li>
+<li><code>$_SERVER[“HTTP_CLIENT_IP”]</code> 获得的值是HTTP中 Client-Ip( client-ip书写测试结果：服务器为window环境，则client-ip可以大小写混写。服务器环境为linux，则client-ip必须全部大写)</li>
+<li><code>$_SERVER[“REMOTE_ADDR”]</code> 获得的值为 最后一个跟你的服务器握手的IP，可能会是代理IP或者其他</li>
+<li><code>$_SERVER[“HTTP_REFERER”]</code> 获得的值为 HTTP中的Referer</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Burp suite 抓包，添加：<code>X-Forward-for:127.0.0.1</code></p>
+</li>
+<li><p>得到flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h1><ul>
+<li><a href="http://www.cnblogs.com/ranyonsue/p/5984001.html" target="_blank" rel="noopener">关于HTTP协议，一篇就够了</a></li>
+</ul>
+<ul>
+<li>返回的响应头中有flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="上传绕过"><a href="#上传绕过" class="headerlink" title="上传绕过"></a>上传绕过</h1><ul>
+<li><p>补充知识：</p>
+<ul>
+<li><a href="http://www.cnblogs.com/shellr00t/p/6426945.html" target="_blank" rel="noopener">典型漏洞归纳之上传漏洞</a></li>
+<li><a href="https://www.freebuf.com/column/161357.html" target="_blank" rel="noopener">Web安全 — 上传漏洞绕过 </a></li>
+</ul>
+</li>
+<li><p>上传文件的过程中：</p>
+<ul>
+<li>上传图片文件 ——》代码提示：必须上传后缀为php的文件</li>
+<li>上传php文件 ——》代码提示：不被允许的文件类型,仅支持上传jpg,gif,png后缀的文件</li>
+</ul>
+</li>
+<li><p>Burp suite 抓包，在路径 <code>/upload</code>后面加上空格，再加<code>1.php</code>(表示自己上传php文件)。再改相应的对应的16进制编码，然后将空格%20修改为00</p>
+</li>
+<li><p>提交，得到flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="SQL注入1"><a href="#SQL注入1" class="headerlink" title="SQL注入1"></a>SQL注入1</h1><ul>
+<li>分析源码：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">Secure Web Login</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>($_POST[user] &amp;&amp; $_POST[pass]) &#123;</span><br><span class="line">    mysql_connect(SAE_MYSQL_HOST_M . <span class="string">':'</span> . SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);</span><br><span class="line">  mysql_select_db(SAE_MYSQL_DB);</span><br><span class="line">  $user = trim($_POST[user]);</span><br><span class="line">  $pass = md5(trim($_POST[pass]));</span><br><span class="line">  $sql=<span class="string">"select user from ctf where (user='"</span>.$user.<span class="string">"') and (pw='"</span>.$pass.<span class="string">"')"</span>;	<span class="comment">//只看这一条sql语句就行了</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'&lt;/br&gt;'</span>.$sql;</span><br><span class="line">  $query = mysql_fetch_array(mysql_query($sql));</span><br><span class="line">  <span class="keyword">if</span>($query[user]==<span class="string">"admin"</span>) &#123;</span><br><span class="line">      <span class="keyword">echo</span> <span class="string">"&lt;p&gt;Logged in! flag:******************** &lt;/p&gt;"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>($query[user] != <span class="string">"admin"</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">"&lt;p&gt;You are not admin!&lt;/p&gt;"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> $query[user];</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;form method=post action=index.php&gt;</span><br><span class="line">&lt;input type=text name=user value=<span class="string">"Username"</span>&gt;</span><br><span class="line">&lt;input type=password name=pass value=<span class="string">"Password"</span>&gt;</span><br><span class="line">&lt;input type=submit&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;a href=<span class="string">"index.phps"</span>&gt;Source&lt;/a&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>问题的关键点是注入，直接<code>admin&#39;) or 1=1#</code>就可以了，登录得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="pass-check"><a href="#pass-check" class="headerlink" title="pass check"></a>pass check</h1><ul>
+<li>分析源码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$pass=@$_POST[<span class="string">'pass'</span>];	<span class="comment">//POST赋值</span></span><br><span class="line">$pass1=***********;<span class="comment">//被隐藏起来的密码</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($pass))	<span class="comment">//检查</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">if</span>(@!strcmp($pass,$pass1))&#123;	<span class="comment">//比较</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"flag:nctf&#123;*&#125;"</span>;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"the pass is wrong!"</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"please input pass!"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>当不同类型的变量进行比较的时候就会存在变量转换的问题，在转换之后就有可能会存在问题。</p>
+</li>
+<li><p>直接传入 <code>pass[]=1</code>,得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="起名字真难"><a href="#起名字真难" class="headerlink" title="起名字真难"></a>起名字真难</h1><ul>
+<li>分析源码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">noother_says_correct</span><span class="params">($number)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        $one = ord(<span class="string">'1'</span>);	<span class="comment">//ord()求一个字符对应的ascii码 </span></span><br><span class="line">        $nine = ord(<span class="string">'9'</span>);</span><br><span class="line">        <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; strlen($number); $i++)	<span class="comment">//循环</span></span><br><span class="line">        &#123;   </span><br><span class="line">                $digit = ord($number&#123;$i&#125;);</span><br><span class="line">                <span class="keyword">if</span> ( ($digit &gt;= $one) &amp;&amp; ($digit &lt;= $nine) )	<span class="comment">//判断，这个变量不能为数字</span></span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">           <span class="keyword">return</span> $number == <span class="string">'54975581388'</span>;	<span class="comment">//这里满足这个条件才能输出flag</span></span><br><span class="line">&#125;</span><br><span class="line">$flag=<span class="string">'*******'</span>;</span><br><span class="line"><span class="keyword">if</span>(noother_says_correct($_GET[<span class="string">'key'</span>]))</span><br><span class="line">    <span class="keyword">echo</span> $flag;</span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'access denied'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>题目中需要传入的变量不能是数字，但要和 54975581388 相等才能输出flag,故通过16进制编码（当字符串开头是0x时，PHP会将字符串转换成十进制再进行比较）。 将 54975581388 转换成16进制 ——》 </li>
+</ul>
+<p><br><br><br></p>
+<h1 id="密码重置"><a href="#密码重置" class="headerlink" title="密码重置"></a>密码重置</h1><ul>
+<li><p>登录进去你会发现 “你的账号” 那一框元素不能修改，且url后面为 “?user1=Y3RmdXNlcg%3D%3D”.</p>
+</li>
+<li><p>直接Burp Suite 抓包，发现此题对三处 admin 加以加密，所以我们要改三处地方。如下：</p>
+</li>
+</ul>
+<p><img src="%E5%8D%97%E9%82%AECTF-Web-WP/1.png" alt></p>
+<ul>
+<li><p>且需对 <code>admin</code> 先进行 base64加密后经过URL编码。</p>
+</li>
+<li><p>go，得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="php-反序列化"><a href="#php-反序列化" class="headerlink" title="php 反序列化"></a>php 反序列化</h1><ul>
+<li>分析代码：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">just4fun</span> </span>&#123;	</span><br><span class="line">    <span class="keyword">var</span> $enter;</span><br><span class="line">    <span class="keyword">var</span> $secret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'pass'</span>])) &#123;	<span class="comment">//判断</span></span><br><span class="line">    $pass = $_GET[<span class="string">'pass'</span>];	<span class="comment">//GET传参赋值</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(get_magic_quotes_gpc())&#123;</span><br><span class="line">        $pass=stripslashes($pass);	<span class="comment">//除掉gpc添加的反斜杠</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $o = unserialize($pass);	<span class="comment">//unserialize() 对单一的已序列化的变量进行操作，将其转换回 PHP 的值。 然后赋值给变量o	</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ($o) &#123;</span><br><span class="line">        $o-&gt;secret = <span class="string">"*"</span>;</span><br><span class="line">        <span class="keyword">if</span> ($o-&gt;secret === $o-&gt;enter)</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Congratulation! Here is my secret: "</span>.$o-&gt;secret;</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"Oh no... You can't fool me"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">echo</span> <span class="string">"are you trolling?"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构造POC <a href="https://www.jianshu.com/p/19999fa5ca8b" target="_blank" rel="noopener">转一个详细过程</a></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">just4fun</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $enter;</span><br><span class="line">    <span class="keyword">var</span> $secret;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;enter=&amp;<span class="keyword">$this</span>-&gt;secret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> serialize(<span class="keyword">new</span> just4fun());</span><br><span class="line"></span><br><span class="line"> <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>得flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="sql-injection-4"><a href="#sql-injection-4" class="headerlink" title="sql injection 4"></a>sql injection 4</h1><ul>
+<li>分析代码：</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//GOAL: login as admin,then get the flag;</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require</span> <span class="string">'db.inc.php'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clean</span><span class="params">($str)</span></span>&#123;	<span class="comment">//自定义一个清除开了gpc后加的反斜杠的函数</span></span><br><span class="line">	<span class="keyword">if</span>(get_magic_quotes_gpc())&#123;</span><br><span class="line">		$str=stripslashes($str);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> htmlentities($str, ENT_QUOTES);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$username = @clean((string)$_GET[<span class="string">'username'</span>]);	<span class="comment">//调用函数</span></span><br><span class="line">$password = @clean((string)$_GET[<span class="string">'password'</span>]);	<span class="comment">//调用函数</span></span><br><span class="line"></span><br><span class="line">$query=<span class="string">'SELECT * FROM users WHERE name=\''</span>.$username.<span class="string">'\' AND pass=\''</span>.$password.<span class="string">'\';'</span>;</span><br><span class="line">$result=mysql_query($query);</span><br><span class="line"><span class="keyword">if</span>(!$result || mysql_num_rows($result) &lt; <span class="number">1</span>)&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">'Invalid password!'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $flag;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>由于使用了htmlentities()函数，所以无法使用分号了。此时就可以使用反斜杠来通过转义的方式来吞掉一个分号。</p>
+</li>
+<li><p>构造url <code>?username=admin\&amp;password= or 1%23</code> 查询语句变为 ——》 <code>SELECT * FROM users WHERE name=&#39;admin\&#39;AND pass=&#39; or 1#&#39;</code></p>
+</li>
+<li><p>得到flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="综合题"><a href="#综合题" class="headerlink" title="综合题"></a>综合题</h1><ul>
+<li><p>点进网页发现一堆文字，类似bugku一道 “jsfuck” 的题，直接丢进控制台，出现一堆文字 “1bc29b36f623ba82aaf6724fd3b16718.php”</p>
+</li>
+<li><p>猜测是某个网页，访问 ——》 网页出现文字 “哈哈哈哈哈哈你上当啦，这里什么都没有，TIP在我脑袋里”</p>
+</li>
+<li><p>Burp Suite 抓包发现header里面有 “history of bash”</p>
+<ul>
+<li><code>Bash shell</code>在<code>~/.bash_history</code>（“~/”表示用户目录）文件中保存了500条使用过的命令，这样能使你输入使用过的长命令变得容易。每个在系统中拥有账号的用户在他的目录下都有一个“.bash_history”文件。</li>
+</ul>
+</li>
+<li><p>URL访问 .bash_history ——》 出现 “zip -r flagbak.zip ./*”</p>
+</li>
+<li><p>访问这个zip文件，自动下载，解压得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="system"><a href="#system" class="headerlink" title="system"></a>system</h1><p>这题挂了…</p>
+<p><br><br><br></p>
+<h1 id="SQL注入2"><a href="#SQL注入2" class="headerlink" title="SQL注入2"></a>SQL注入2</h1><ul>
+<li>分析代码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>($_POST[user] &amp;&amp; $_POST[pass]) &#123;</span><br><span class="line">	mysql_connect(SAE_MYSQL_HOST_M . <span class="string">':'</span> . SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS);</span><br><span class="line">	mysql_select_db(SAE_MYSQL_DB);</span><br><span class="line">	$user = $_POST[user];</span><br><span class="line">	$pass = md5($_POST[pass]);</span><br><span class="line">	$query = @mysql_fetch_array(mysql_query(<span class="string">"select pw from ctf where user='$user'"</span>));</span><br><span class="line">	<span class="keyword">if</span> (($query[pw]) &amp;&amp; (!strcasecmp($pass, $query[pw]))) &#123;	<span class="comment">//如果变量存在，并且，$pass与$query[pw]相等,输出flag</span></span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;p&gt;Logged in! Key: ntcf&#123;**************&#125; &lt;/p&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">echo</span>(<span class="string">"&lt;p&gt;Log in failure!&lt;/p&gt;"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>观察发现只要让结果集中有你输入密码的MD5值就行，直接构造 user处为： <code>admin&#39; and 1=2 union select md5(1)#</code> password 为 <code>1</code></p>
+</li>
+<li><p>提交得flag…</p>
+</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="综合题2"><a href="#综合题2" class="headerlink" title="综合题2"></a>综合题2</h1><ul>
+<li>网上的WP很详细，云通关一波…（还不会写脚本啦<del>~</del>）</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="密码重置2"><a href="#密码重置2" class="headerlink" title="密码重置2"></a>密码重置2</h1><ul>
+<li><p>查看网页源代码，知道用户名是 <a href="mailto:admin@nuptzj.cn" target="_blank" rel="noopener">admin@nuptzj.cn</a></p>
+</li>
+<li><p>类似hgame week1的一道题，linux下一般使用vi编辑器，并且异常退出会留下备份文件</p>
+</li>
+<li><p>经过测试发现存在<code>.submit.php.swp</code>文件</p>
+</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">........这一行是省略的代码........ <span class="comment">/* 如果登录邮箱地址不是管理员则 die() 数据库结构 -- -- 表的结构 `user` -- CREATE TABLE IF NOT EXISTS `user` ( `id` int(11) NOT NULL AUTO_INCREMENT, `username` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `token` int(255) NOT NULL DEFAULT '0', PRIMARY KEY (`id`) ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ; -- -- 转存表中的数据 `user` -- INSERT INTO `user` (`id`, `username`, `email`, `token`) VALUES (1, '****不可见***', '***不可见***', 0); */</span> ........这一行是省略的代码........ </span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">empty</span>($token)&amp;&amp;!<span class="keyword">empty</span>($emailAddress)) &#123; </span><br><span class="line">    <span class="keyword">if</span>(strlen($token)!=<span class="number">10</span>) </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'fail'</span>); </span><br><span class="line">    <span class="keyword">if</span>($token!=<span class="string">'0'</span>) </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'fail'</span>); </span><br><span class="line">        $sql = <span class="string">"SELECT count(*) as num from `user` where token='$token' AND email='$emailAddress'"</span>; </span><br><span class="line">        $r = mysql_query($sql) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">'db error'</span>); </span><br><span class="line">        $r = mysql_fetch_assoc($r); </span><br><span class="line">        $r = $r[<span class="string">'num'</span>]; </span><br><span class="line">        <span class="keyword">if</span>($r&gt;<span class="number">0</span>)&#123; <span class="keyword">echo</span> $flag; &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123; <span class="keyword">echo</span> <span class="string">"失败了呀"</span>; &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接输出十个0，得到flag…</li>
+</ul>
+<p><br><br><br></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><ul>
+<li>《文件包含》一题中涉及到了：<ul>
+<li><a href="https://www.freebuf.com/column/148886.html" target="_blank" rel="noopener">php伪协议实现命令执行的七种姿势 </a></li>
+<li><a href="https://www.freebuf.com/column/183226.html" target="_blank" rel="noopener">ctf中关于php伪协议的考查 </a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>《Header》一题中涉及到了：<ul>
+<li><a href="http://www.cnblogs.com/ranyonsue/p/5984001.html" target="_blank" rel="noopener">关于HTTP协议，一篇就够了</a></li>
+</ul>
+</li>
+</ul>
+<p><br><br><br></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/" title="南邮CTF Web Writeup">https://p2hm1n.github.io/2019/03/05/南邮CTF-Web-WP/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/Writeup/" rel="tag"># Writeup</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/05/BugkuCTF-Web-writeup/" rel="prev" title="BugkuCTF Writeup">
+                BugkuCTF Writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#签到题"><span class="nav-number">1.</span> <span class="nav-text">签到题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#md5-collision"><span class="nav-number">2.</span> <span class="nav-text">md5 collision</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#签到2"><span class="nav-number">3.</span> <span class="nav-text">签到2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#这题不是WEB"><span class="nav-number">4.</span> <span class="nav-text">这题不是WEB</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#层层递进"><span class="nav-number">5.</span> <span class="nav-text">层层递进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AAencode"><span class="nav-number">6.</span> <span class="nav-text">AAencode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单身二十年"><span class="nav-number">7.</span> <span class="nav-text">单身二十年</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#你从哪里来"><span class="nav-number">8.</span> <span class="nav-text">你从哪里来</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php-decode"><span class="nav-number">9.</span> <span class="nav-text">php decode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件包含"><span class="nav-number">10.</span> <span class="nav-text">文件包含</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单身一百年也没用"><span class="nav-number">11.</span> <span class="nav-text">单身一百年也没用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COOKIE"><span class="nav-number">12.</span> <span class="nav-text">COOKIE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MYSQL"><span class="nav-number">13.</span> <span class="nav-text">MYSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql-injection-3"><span class="nav-number">14.</span> <span class="nav-text">sql injection 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#x00"><span class="nav-number">15.</span> <span class="nav-text">/x00</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bypass-again"><span class="nav-number">16.</span> <span class="nav-text">bypass again</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量覆盖"><span class="nav-number">17.</span> <span class="nav-text">变量覆盖</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PHP是世界上最好的语言"><span class="nav-number">18.</span> <span class="nav-text">PHP是世界上最好的语言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#伪装者"><span class="nav-number">19.</span> <span class="nav-text">伪装者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Header"><span class="nav-number">20.</span> <span class="nav-text">Header</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传绕过"><span class="nav-number">21.</span> <span class="nav-text">上传绕过</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL注入1"><span class="nav-number">22.</span> <span class="nav-text">SQL注入1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pass-check"><span class="nav-number">23.</span> <span class="nav-text">pass check</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#起名字真难"><span class="nav-number">24.</span> <span class="nav-text">起名字真难</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#密码重置"><span class="nav-number">25.</span> <span class="nav-text">密码重置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#php-反序列化"><span class="nav-number">26.</span> <span class="nav-text">php 反序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sql-injection-4"><span class="nav-number">27.</span> <span class="nav-text">sql injection 4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#综合题"><span class="nav-number">28.</span> <span class="nav-text">综合题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#system"><span class="nav-number">29.</span> <span class="nav-text">system</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL注入2"><span class="nav-number">30.</span> <span class="nav-text">SQL注入2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#综合题2"><span class="nav-number">31.</span> <span class="nav-text">综合题2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#密码重置2"><span class="nav-number">32.</span> <span class="nav-text">密码重置2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">33.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'Gitalk',
+    owner: 'P2hm1n',
+    admin: [''],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
+  
+  <script>
+    (function () {
+
+      firebase.initializeApp({
+        apiKey: 'AIzaSyCDQ4n4iCo1yBkV-vwZmbaCxR8JgT7zTi4',
+        projectId: 'blog-6ef40'
+      })
+
+      function getCount(doc, increaseCount) {
+        //increaseCount will be false when not in article page
+
+        return doc.get().then(function (d) {
+          var count
+          if (!d.exists) { //has no data, initialize count
+            if (increaseCount) {
+              doc.set({
+                count: 1
+              })
+              count = 1
+            }
+            else {
+              count = 0
+            }
+          }
+          else { //has data
+            count = d.data().count
+            if (increaseCount) {
+              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
+                doc.set({ //increase count
+                  count: count + 1
+                })
+                count++
+              }
+            }
+          }
+          if (window.localStorage && increaseCount) { //mark as visited
+            localStorage.setItem(title, true)
+          }
+
+          return count
+        })
+      }
+
+      function appendCountTo(el) {
+        return function (count) {
+          $(el).append(
+            $('<span>').addClass('post-visitors-count').append(
+              $('<span>').addClass('post-meta-divider').text('|')
+            ).append(
+              $('<span>').addClass('post-meta-item-icon').append(
+                $('<i>').addClass('fa fa-users')
+              )
+              ).append($('<span>').text('阅读次数 ' + count))
+          )
+        }
+      }
+
+      var db = firebase.firestore()
+      var articles = db.collection('articles')
+
+      //https://hexo.io/docs/variables.html
+      var isPost = '南邮CTF Web Writeup'.length > 0
+      var isArchive = '' === 'true'
+      var isCategory = ''.length > 0
+      var isTag = ''.length > 0
+
+      if (isPost) { //is article page
+        var title = '南邮CTF Web Writeup'
+        var doc = articles.doc(title)
+
+        getCount(doc, true).then(appendCountTo($('.post-meta')))
+      }
+      else if (!isArchive && !isCategory && !isTag) { //is index page
+        var titles = [] //array to titles
+
+        var postsstr = '' //if you have a better way to get titles of posts, please change it
+        eval(postsstr)
+
+        var promises = titles.map(function (title) {
+          return articles.doc(title)
+        }).map(function (doc) {
+          return getCount(doc)
+        })
+        Promise.all(promises).then(function (counts) {
+          var metas = $('.post-meta')
+          counts.forEach(function (val, idx) {
+            appendCountTo(metas[idx])(val)
+          })
+        })
+      }
+    })()
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+  <script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

