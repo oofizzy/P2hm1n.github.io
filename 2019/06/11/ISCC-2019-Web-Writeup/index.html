@@ -110,19 +110,19 @@
 <meta name="keywords" content="CTF,Writeup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ISCC 2019 Web Writeup">
-<meta property="og:url" content="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/index.html">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/06/11/ISCC-2019-Web-Writeup/index.html">
 <meta property="og:site_name" content="ONE PIECE">
 <meta property="og:description" content="只做了Web题…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://p2hm1n.github.io/.io//1.png">
-<meta property="og:image" content="https://p2hm1n.github.io/.io//2.png">
-<meta property="og:image" content="https://p2hm1n.github.io/.io//3.png">
-<meta property="og:image" content="https://p2hm1n.github.io/.io//4.png">
-<meta property="og:updated_time" content="2019-06-09T13:24:00.658Z">
+<meta property="og:image" content="https://i.loli.net/2019/06/11/5cff5cdcc5f0922755.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/11/5cff5ce97a42b52508.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/11/5cff5d01933b759829.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/11/5cff5d2139d0c35247.png">
+<meta property="og:updated_time" content="2019-06-11T07:50:11.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ISCC 2019 Web Writeup">
 <meta name="twitter:description" content="只做了Web题…">
-<meta name="twitter:image" content="https://p2hm1n.github.io/.io//1.png">
+<meta name="twitter:image" content="https://i.loli.net/2019/06/11/5cff5cdcc5f0922755.png">
 
 
 
@@ -130,7 +130,7 @@
 
   
   
-  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/">
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/11/ISCC-2019-Web-Writeup/">
 
 
 
@@ -372,7 +372,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/11/ISCC-2019-Web-Writeup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="P2hm1n">
@@ -415,7 +415,7 @@
                 
               
 
-              <time title="创建时间：2019-06-09 20:53:20 / 修改时间：21:24:00" itemprop="dateCreated datePublished" datetime="2019-06-09T20:53:20+08:00">2019-06-09</time>
+              <time title="创建时间：2019-06-11 20:53:20 / 修改时间：15:50:11" itemprop="dateCreated datePublished" datetime="2019-06-11T20:53:20+08:00">2019-06-11</time>
             
 
             
@@ -522,9 +522,15 @@
 <p>看见一篇不错的文章,直接提供了思路： <a href="http://foreversong.cn/archives/889" target="_blank" rel="noopener">http://foreversong.cn/archives/889</a></p>
 <p>经过尝试发现验证码是刷新的，且不可从前端获取到</p>
 <p>尝试设置验证码为空，且删除Cookie</p>
-<p><img src="/.io//1.png" alt></p>
+<img src="https://i.loli.net/2019/06/11/5cff5cdcc5f0922755.png" alt="1.png" title="1.png">
+
 <p>然后attack</p>
-<p><img src="/.io//2.png" alt></p>
+<img src="https://i.loli.net/2019/06/11/5cff5ce97a42b52508.png" alt="2.png" title="2.png">
+
+
+
+
+
 <p><br><br></p>
 <h1 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h1><p>一道sql-labs二次注入的题</p>
 <p>直接注册：admin’or 1#</p>
@@ -553,7 +559,10 @@
 <p>注入，过滤了圆括号，注释符，from等等</p>
 <p>payload ：order by 排序盲注</p>
 <p>（直接放上官方payload</p>
-<p><img src="/.io//3.png" alt></p>
+<img src="https://i.loli.net/2019/06/11/5cff5d01933b759829.png" alt="3.png" title="3.png">
+
+
+
 <p><br><br></p>
 <h1 id="Web6"><a href="#Web6" class="headerlink" title="Web6"></a>Web6</h1><p>常规注册账号，在burpsuite里查看了返回值</p>
 <blockquote>
@@ -580,7 +589,9 @@
 <p>后得到</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiMTIzMzIxMTIiLCJwcml2IjoiYWRtaW4ifQ.IulW498rWKk9cs38oRe3c7hBrF130CwzDbe346yldzQ</span><br></pre></td></tr></table></figure>
 
-<p>在list界面带上这个访问<br><img src="/.io//4.png" alt></p>
+<p>在list界面带上这个访问</p>
+<img src="https://i.loli.net/2019/06/11/5cff5d2139d0c35247.png" alt="4.png" title="4.png">
+
 <p>最后在生成paste的界面<br>访问 <a href="http://39.100.83.188:8053/text/admin:22f1e0aa7a31422ad63480aa27711277" target="_blank" rel="noopener">http://39.100.83.188:8053/text/admin:22f1e0aa7a31422ad63480aa27711277</a><br>得到flag…</p>
 
       
@@ -616,7 +627,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/" title="ISCC 2019 Web Writeup">https://p2hm1n.github.io/2019/06/09/ISCC-2019-Web-Writeup/</a>
+    <a href="https://p2hm1n.github.io/2019/06/11/ISCC-2019-Web-Writeup/" title="ISCC 2019 Web Writeup">https://p2hm1n.github.io/2019/06/11/ISCC-2019-Web-Writeup/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -647,8 +658,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/07/SQL注入一把梭/" rel="next" title="SQL注入一把梭">
-                <i class="fa fa-chevron-left"></i> SQL注入一把梭
+              <a href="/2019/06/11/DDCTF-2019-writeup/" rel="next" title="DDCTF 2019 Writeup">
+                <i class="fa fa-chevron-left"></i> DDCTF 2019 Writeup
               </a>
             
           </div>
@@ -656,10 +667,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/09/工具一把梭/" rel="prev" title="工具一把梭">
-                工具一把梭 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
