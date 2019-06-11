@@ -110,16 +110,16 @@
 <meta name="keywords" content="CTF,Writeup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DDCTF 2019 Writeup">
-<meta property="og:url" content="https://p2hm1n.github.io/2019/04/12/DDCTF-2019-writeup/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/04/12/DDCTF-2019-writeup/index.html">
 <meta property="og:site_name" content="ONE PIECE">
 <meta property="og:description" content="2019的DDCTF…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://p2hm1n.github.io/.io//1.png">
+<meta property="og:image" content="http://yoursite.com/.com//1.png">
 <meta property="og:updated_time" content="2019-06-07T06:12:23.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DDCTF 2019 Writeup">
 <meta name="twitter:description" content="2019的DDCTF…">
-<meta name="twitter:image" content="https://p2hm1n.github.io/.io//1.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//1.png">
 
 
 
@@ -127,7 +127,7 @@
 
   
   
-  <link rel="canonical" href="https://p2hm1n.github.io/2019/04/12/DDCTF-2019-writeup/">
+  <link rel="canonical" href="http://yoursite.com/2019/04/12/DDCTF-2019-writeup/">
 
 
 
@@ -369,7 +369,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/04/12/DDCTF-2019-writeup/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/12/DDCTF-2019-writeup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="P2hm1n">
@@ -528,7 +528,7 @@
 
 <p>一个<code>extract（）</code>变量覆盖,先进入网址 <code>http://117.51.150.246/f1ag!ddctf.php</code> 利用变量覆盖构造 <code>uid=&amp;content</code></p>
 <p>成功打印flag…</p>
-<p><img src="/.io//1.png" alt></p>
+<p><img src="/.com//1.png" alt></p>
 <p><br><br></p>
 <h2 id="WEB-签到题"><a href="#WEB-签到题" class="headerlink" title="WEB 签到题"></a>WEB 签到题</h2><p><strong>知识点：PHP 源码审计，文本格式化，反序列化</strong></p>
 <p><strong>补充知识</strong></p>
@@ -620,7 +620,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://p2hm1n.github.io/2019/04/12/DDCTF-2019-writeup/" title="DDCTF 2019 Writeup">https://p2hm1n.github.io/2019/04/12/DDCTF-2019-writeup/</a>
+    <a href="http://yoursite.com/2019/04/12/DDCTF-2019-writeup/" title="DDCTF 2019 Writeup">http://yoursite.com/2019/04/12/DDCTF-2019-writeup/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -738,7 +738,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1375,102 +1375,6 @@
   
 
   
-  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase-firestore.js"></script>
-  
-  <script>
-    (function () {
-
-      firebase.initializeApp({
-        apiKey: 'AIzaSyCDQ4n4iCo1yBkV-vwZmbaCxR8JgT7zTi4',
-        projectId: 'blog-6ef40'
-      })
-
-      function getCount(doc, increaseCount) {
-        //increaseCount will be false when not in article page
-
-        return doc.get().then(function (d) {
-          var count
-          if (!d.exists) { //has no data, initialize count
-            if (increaseCount) {
-              doc.set({
-                count: 1
-              })
-              count = 1
-            }
-            else {
-              count = 0
-            }
-          }
-          else { //has data
-            count = d.data().count
-            if (increaseCount) {
-              if (!(window.localStorage && window.localStorage.getItem(title))) { //if first view this article
-                doc.set({ //increase count
-                  count: count + 1
-                })
-                count++
-              }
-            }
-          }
-          if (window.localStorage && increaseCount) { //mark as visited
-            localStorage.setItem(title, true)
-          }
-
-          return count
-        })
-      }
-
-      function appendCountTo(el) {
-        return function (count) {
-          $(el).append(
-            $('<span>').addClass('post-visitors-count').append(
-              $('<span>').addClass('post-meta-divider').text('|')
-            ).append(
-              $('<span>').addClass('post-meta-item-icon').append(
-                $('<i>').addClass('fa fa-users')
-              )
-              ).append($('<span>').text('阅读次数 ' + count))
-          )
-        }
-      }
-
-      var db = firebase.firestore()
-      var articles = db.collection('articles')
-
-      //https://hexo.io/docs/variables.html
-      var isPost = 'DDCTF 2019 Writeup'.length > 0
-      var isArchive = '' === 'true'
-      var isCategory = ''.length > 0
-      var isTag = ''.length > 0
-
-      if (isPost) { //is article page
-        var title = 'DDCTF 2019 Writeup'
-        var doc = articles.doc(title)
-
-        getCount(doc, true).then(appendCountTo($('.post-meta')))
-      }
-      else if (!isArchive && !isCategory && !isTag) { //is index page
-        var titles = [] //array to titles
-
-        var postsstr = '' //if you have a better way to get titles of posts, please change it
-        eval(postsstr)
-
-        var promises = titles.map(function (title) {
-          return articles.doc(title)
-        }).map(function (doc) {
-          return getCount(doc)
-        })
-        Promise.all(promises).then(function (counts) {
-          var metas = $('.post-meta')
-          counts.forEach(function (val, idx) {
-            appendCountTo(metas[idx])(val)
-          })
-        })
-      }
-    })()
-  </script>
-
 
   
 
