@@ -24,6 +24,13 @@
 
 
 
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+
 
 
 
@@ -106,8 +113,8 @@
 <meta property="og:description" content="2019的DDCTF…">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2019/06/12/5d0085ef8c60f75892.png">
-<meta property="og:image" content="https://p2hm1n.github.io/2019/06/11/DDCTF-2019-writeup/DDCTF-2019-writeup/1.png">
-<meta property="og:updated_time" content="2019-06-12T04:59:05.248Z">
+<meta property="og:image" content="https://i.loli.net/2019/06/12/5d00a7f4048bc40190.png">
+<meta property="og:updated_time" content="2019-06-12T08:05:04.474Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DDCTF 2019 Writeup">
 <meta name="twitter:description" content="2019的DDCTF…">
@@ -455,7 +462,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-06-12 12:59:05" itemprop="dateModified" datetime="2019-06-12T12:59:05+08:00">2019-06-12</time>
+                <time title="修改时间：2019-06-12 16:05:04" itemprop="dateModified" datetime="2019-06-12T16:05:04+08:00">2019-06-12</time>
               
             
           </span>
@@ -502,6 +509,34 @@
           
 
           
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
+          
 
           
 
@@ -522,11 +557,8 @@
 <a id="more"></a>
 
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>第一次打线上大型CTF比赛，为期一周的比赛只打了一天就放弃了orz（因为那时不会反序列化和Python</p>
-<p>每道题都做了一点，但也只做出了一题就去学反序列化的知识了，总结一下还是太菜</p>
+<p>每道题都做了一点，但也只做出了一题就去学其他知识没有继续做了，总结一下还是太菜emm…</p>
 <img src="https://i.loli.net/2019/06/12/5d0085ef8c60f75892.png" alt="TIM截图20190612125529.png" title="TIM截图20190612125529.png">
-
-
-
 
 
 
@@ -542,14 +574,12 @@
 </ul>
 </li>
 </ul>
-<br>
-
 <ul>
 <li><a href="http://www.php.cn/php-weizijiaocheng-345498.html" target="_blank" rel="noopener">PHP页面跳转操作实例分析(header方法)</a></li>
 </ul>
 <br>
-**解题过程**
 
+<p><strong>解题过程</strong></p>
 <p>进来观察源码和URL,URL后端处 <code>?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09</code>,对其进行两次base64解码加一次16进制解码，发现解码出来与其题目中 flag.jpg 相对应</p>
 <p>按照加密逻辑构造 index.php ，访问URL，查看源码发现src属性里面的东西是个base64加密，再次解码。得到一串代码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span></span><br><span class="line"><span class="comment"> * Date: July 4,2018</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);	<span class="comment">//error_reporting() 设置 PHP 的报错级别并返回当前级别。 这里是显示所有错误</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">header(<span class="string">'content-type:text/html;charset=utf-8'</span>);	<span class="comment">//设置页面内容是html，编码格式是utf-8</span></span><br><span class="line"><span class="keyword">if</span>(! <span class="keyword">isset</span>($_GET[<span class="string">'jpg'</span>]))	<span class="comment">//进行一个判断	</span></span><br><span class="line">    header(<span class="string">'Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09'</span>);	<span class="comment">//0s后跳转该url</span></span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[<span class="string">'jpg'</span>])));	<span class="comment">//一次16进制解码加两次base64解码	</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;title&gt;'</span>.$_GET[<span class="string">'jpg'</span>].<span class="string">'&lt;/title&gt;'</span>;	<span class="comment">//输出</span></span><br><span class="line">$file = preg_replace(<span class="string">"/[^a-zA-Z0-9.]+/"</span>,<span class="string">""</span>, $file);	<span class="comment">//正则匹配，删除除了a到z，A到Z，0到9和.的</span></span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;	<span class="comment">//输出</span></span><br><span class="line">$file = str_replace(<span class="string">"config"</span>,<span class="string">"!"</span>, $file);	<span class="comment">//替换文件中的 config  为 ！</span></span><br><span class="line"><span class="keyword">echo</span> $file.<span class="string">'&lt;/br&gt;'</span>;	<span class="comment">//输出</span></span><br><span class="line">$txt = base64_encode(file_get_contents($file));	<span class="comment">//读文件并加密</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;img src='data:image/gif;base64,"</span>.$txt.<span class="string">"'&gt;&lt;/img&gt;"</span>;	<span class="comment">//输出</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Can you find the flag file?</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -564,7 +594,6 @@
 
 <p>一个<code>extract（）</code>变量覆盖,先进入网址 <code>http://117.51.150.246/f1ag!ddctf.php</code> 利用变量覆盖构造 <code>uid=&amp;content</code></p>
 <p>成功打印flag…</p>
-<p><img src="DDCTF-2019-writeup/1.png" alt></p>
 <p><br><br></p>
 <h2 id="WEB-签到题"><a href="#WEB-签到题" class="headerlink" title="WEB 签到题"></a>WEB 签到题</h2><p><strong>知识点：PHP 源码审计，文本格式化，反序列化</strong></p>
 <p><strong>补充知识</strong></p>
@@ -575,9 +604,6 @@
 <li><a href="https://www.freebuf.com/news/193649.html" target="_blank" rel="noopener">技术分享 | 多种测试HTTP身份验证的方法</a></li>
 </ul>
 <ul>
-<li><a href="https://www.cnblogs.com/52php/p/5658063.html" target="_blank" rel="noopener">构造方法<strong>construct()与析构方法</strong>destruct()</a></li>
-</ul>
-<ul>
 <li><a href="http://www.w3school.com.cn/json/index.asp" target="_blank" rel="noopener">JSON 教程</a></li>
 </ul>
 <ul>
@@ -585,6 +611,7 @@
 <li><a href="https://baijiahao.baidu.com/s?id=1607667991000169190&wfr=spider&for=pc" target="_blank" rel="noopener">盘点PHP最实用的5大魔术方法及其功能作用</a></li>
 <li><a href="https://www.cnblogs.com/baocheng/p/5607216.html" target="_blank" rel="noopener">PHP魔术方法使用总结</a></li>
 <li><a href="https://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">PHP 手册 语言参考 类与对象</a></li>
+<li><a href="https://www.cnblogs.com/52php/p/5658063.html" target="_blank" rel="noopener">构造方法<strong>construct()与析构方法</strong>destruct()</a></li>
 </ul>
 </li>
 </ul>
@@ -600,10 +627,20 @@
 </li>
 </ul>
 <br>
-**解题过程**
 
-<p>一开始认为是一个401认证，尝试kali直接爆破用户名跟密码，尝试很久失败告终…</p>
-<p>查看源码，发现一个叫做 <code>js/index.js</code> 的文件</p>
+<p><strong>解题过程</strong></p>
+<p>进入页面后空无一物，提示：<strong>抱歉，您没有登陆权限，请获取权限后访问—–</strong></p>
+<img src="https://i.loli.net/2019/06/12/5d00a7f4048bc40190.png" alt="TIM截图20190612152058.png" title="TIM截图20190612152058.png">
+
+<ul>
+<li>因为出题人一定会给提示，通常这种情况下我们会选择几种方式来突破<ol>
+<li>看网页源码</li>
+<li>扫目录</li>
+<li>抓包</li>
+</ol>
+</li>
+</ul>
+<p><strong>查看源码，发现一个叫做 <code>js/index.js</code> 的文件</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">auth</span>(<span class="params"></span>) </span>&#123; <span class="comment">//自定义函数</span></span><br><span class="line">    $.ajax(&#123;  <span class="comment">//ajax请求的api</span></span><br><span class="line">        type: <span class="string">"post"</span>,</span><br><span class="line">        url:<span class="string">"http://117.51.158.44/app/Auth.php"</span>,	<span class="comment">//重点一</span></span><br><span class="line">        contentType: <span class="string">"application/json;charset=utf-8"</span>,</span><br><span class="line">        dataType: <span class="string">"json"</span>,</span><br><span class="line">        beforeSend: <span class="function"><span class="keyword">function</span> (<span class="params">XMLHttpRequest</span>) </span>&#123;</span><br><span class="line">            XMLHttpRequest.setRequestHeader(<span class="string">"didictf_username"</span>, <span class="string">""</span>);	<span class="comment">//重点二</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="comment">//suucess和error分别指定了成功和错误后要执行的动作。 </span></span><br><span class="line">        success: <span class="function"><span class="keyword">function</span> (<span class="params">getdata</span>) </span>&#123;</span><br><span class="line">           <span class="built_in">console</span>.log(getdata);</span><br><span class="line">           <span class="keyword">if</span>(getdata.data !== <span class="string">''</span>) &#123;</span><br><span class="line">               <span class="built_in">document</span>.getElementById(<span class="string">'auth'</span>).innerHTML = getdata.data;</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;,<span class="attr">error</span>:<span class="function"><span class="keyword">function</span>(<span class="params">error</span>)</span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(error);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>访问url：<a href="http://117.51.158.44/app/Auth.php" target="_blank" rel="noopener">http://117.51.158.44/app/Auth.php</a> 发现提示<br> <code>data    &quot;抱歉，您没有登陆权限，请获取权限后访问-----&quot;</code></p>
@@ -619,7 +656,6 @@
 </ul>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//url:app/Session.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="string">'Application.php'</span>;	<span class="comment">//包含文件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Session</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;	<span class="comment">//设置Session文件一些配置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//key建议为8位字符串</span></span><br><span class="line">    <span class="keyword">var</span> $eancrykey                  = <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_expiration			= <span class="number">7200</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_name                = <span class="string">'ddctf_id'</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_path				= <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_domain				= <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_secure				= <span class="keyword">FALSE</span>;</span><br><span class="line">    <span class="keyword">var</span> $activity                   = <span class="string">"DiDiCTF"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span>		</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">parent</span>::auth()) &#123;	<span class="comment">//通过parent::调用父类方法</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;get_key();</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;session_read()) &#123;</span><br><span class="line">                $data = <span class="string">'DiDI Welcome you %s'</span>;</span><br><span class="line">                $data = sprintf($data,$_SERVER[<span class="string">'HTTP_USER_AGENT'</span>]);</span><br><span class="line">                <span class="keyword">parent</span>::response($data,<span class="string">'sucess'</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;session_create();</span><br><span class="line">                $data = <span class="string">'DiDI Welcome you'</span>;</span><br><span class="line">                <span class="keyword">parent</span>::response($data,<span class="string">'sucess'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">get_key</span><span class="params">()</span> </span>&#123;	<span class="comment">//创建私有方法</span></span><br><span class="line">        <span class="comment">//eancrykey  and flag under the folder</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;eancrykey =  file_get_contents(<span class="string">'../config/key.txt'</span>);	<span class="comment">//flag在这个文件夹里面</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">session_read</span><span class="params">()</span> </span>&#123;	<span class="comment">//创建公有方法</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">empty</span>($_COOKIE)) &#123;	<span class="comment">//如果cookie为空</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">FALSE</span>;	<span class="comment">//返回false</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $session = $_COOKIE[<span class="keyword">$this</span>-&gt;cookie_name];	<span class="comment">//对$session进行赋值</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">isset</span>($session)) &#123;	<span class="comment">//如果没有设置$session</span></span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">"session not found"</span>,<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $hash = substr($session,strlen($session)<span class="number">-32</span>);	<span class="comment">//截取字符串</span></span><br><span class="line">        $session = substr($session,<span class="number">0</span>,strlen($session)<span class="number">-32</span>);	<span class="comment">//截取字符串</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($hash !== md5(<span class="keyword">$this</span>-&gt;eancrykey.$session)) &#123;	<span class="comment">//判断</span></span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">"the cookie data not match"</span>,<span class="string">'error'</span>);	<span class="comment">//通过parent::调用父类方法</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;	<span class="comment">//返回失败</span></span><br><span class="line">        &#125;</span><br><span class="line">        $session = unserialize($session);	<span class="comment">//反序列化</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!is_array($session) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'session_id'</span>]) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'ip_address'</span>]) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'user_agent'</span>]))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($_POST[<span class="string">"nickname"</span>])) &#123;	<span class="comment">//POST的不为空</span></span><br><span class="line">            $arr = <span class="keyword">array</span>($_POST[<span class="string">"nickname"</span>],<span class="keyword">$this</span>-&gt;eancrykey);</span><br><span class="line">            $data = <span class="string">"Welcome my friend %s"</span>;</span><br><span class="line">            <span class="keyword">foreach</span> ($arr <span class="keyword">as</span> $k =&gt; $v) &#123;	<span class="comment">//打印变量</span></span><br><span class="line">                $data = sprintf($data,$v);	<span class="comment">//输出</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">parent</span>::response($data,<span class="string">"Welcome"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($session[<span class="string">'ip_address'</span>] != $_SERVER[<span class="string">'REMOTE_ADDR'</span>]) &#123;</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">'the ip addree not match'</span>.<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>($session[<span class="string">'user_agent'</span>] != $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>]) &#123;</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">'the user agent not match'</span>,<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">TRUE</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">session_create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $sessionid = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">while</span>(strlen($sessionid) &lt; <span class="number">32</span>) &#123;</span><br><span class="line">            $sessionid .= mt_rand(<span class="number">0</span>,mt_getrandmax());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $userdata = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">'session_id'</span> =&gt; md5(uniqid($sessionid,<span class="keyword">TRUE</span>)),</span><br><span class="line">            <span class="string">'ip_address'</span> =&gt; $_SERVER[<span class="string">'REMOTE_ADDR'</span>],</span><br><span class="line">            <span class="string">'user_agent'</span> =&gt; $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>],</span><br><span class="line">            <span class="string">'user_data'</span> =&gt; <span class="string">''</span>,</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $cookiedata = serialize($userdata);	<span class="comment">//序列化</span></span><br><span class="line">        $cookiedata = $cookiedata.md5(<span class="keyword">$this</span>-&gt;eancrykey.$cookiedata);</span><br><span class="line">        $expire = <span class="keyword">$this</span>-&gt;cookie_expiration + time();</span><br><span class="line">        setcookie(</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_name,</span><br><span class="line">            $cookiedata,</span><br><span class="line">            $expire,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_path,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_domain,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_secure</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ddctf = <span class="keyword">new</span> Session();</span><br><span class="line">$ddctf-&gt;index();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>经过了漫长的审计过程，</p>
 <p><br><br></p>
 <h2 id="Upload-IMG"><a href="#Upload-IMG" class="headerlink" title="Upload-IMG"></a>Upload-IMG</h2><p><strong>知识点：PHP-GD 二次渲染绕过</strong></p>
 
@@ -774,7 +810,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -826,7 +862,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">5</span>
+                      
+                    
+                    <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -947,7 +985,21 @@
   <span class="author" itemprop="copyrightHolder">P2hm1n</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">132k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:01</span>
   
 </div>
 
