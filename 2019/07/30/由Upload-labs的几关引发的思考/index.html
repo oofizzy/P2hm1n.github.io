@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-corner-indicator.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  
+
+
+
+
+  <meta name="description" content="Upload-labs的一点点感悟…">
+<meta name="keywords" content="Writeup,File Upload">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由Upload-labs的几关引发的思考">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/07/30/由Upload-labs的几关引发的思考/index.html">
+<meta property="og:site_name" content="ONE PIECE">
+<meta property="og:description" content="Upload-labs的一点点感悟…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36d43aa7e2666844.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36d5a248c7a79821.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36d6668c27882365.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36d74a266a555716.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36d78e33c8917855.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d36fbe0289cf81488.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190730092047-42c919fc-b268-1.gif">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d37034b6535e13055.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3703abcd78978539.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d37114e7d6df90788.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3711a581fb860689.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3713b59c20928903.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3713fd32c5072944.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3714f03779543742.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/23/5d3719710712c32958.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/24/5d3801e9590ee96752.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/24/5d38031fb21d647525.png">
+<meta property="og:image" content="https://i.loli.net/2019/07/24/5d38046992ef917543.png">
+<meta property="og:updated_time" content="2019-07-30T03:27:40.115Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由Upload-labs的几关引发的思考">
+<meta name="twitter:description" content="Upload-labs的一点点感悟…">
+<meta name="twitter:image" content="https://i.loli.net/2019/07/23/5d36d43aa7e2666844.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/07/30/由Upload-labs的几关引发的思考/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>由Upload-labs的几关引发的思考 | ONE PIECE</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ONE PIECE</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">P2hm1n's blog</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/07/30/由Upload-labs的几关引发的思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="P2hm1n">
+      <meta itemprop="description" content="ONE PIECE">
+      <meta itemprop="image" content="/images/lufei.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ONE PIECE">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">由Upload-labs的几关引发的思考
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-30 11:18:08 / 修改时间：11:27:40" itemprop="dateCreated datePublished" datetime="2019-07-30T11:18:08+08:00">2019-07-30</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Writeup/" itemprop="url" rel="index"><span itemprop="name">Writeup</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2019/07/30/由Upload-labs的几关引发的思考/" class="leancloud_visitors" data-flag-title="由Upload-labs的几关引发的思考">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">7 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Upload-labs的一点点感悟…</p>
+<a id="more"></a>
+
+<blockquote>
+<p>文章首发先知社区：<a href="https://xz.aliyun.com/t/5791#reply-12431" target="_blank" rel="noopener">https://xz.aliyun.com/t/5791#reply-12431</a></p>
+</blockquote>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>upload-labs 一共20关，是一个使用php语言编写的，专门收集渗透测试和CTF中遇到的各种上传漏洞的靶场…</p>
+<p><strong>项目地址</strong>：<a href="https://github.com/c0ny1/upload-labs" target="_blank" rel="noopener">https://github.com/c0ny1/upload-labs</a></p>
+<p>最近在练习 upload-labs 里面的关卡，耐心的做完题目后受益良多…</p>
+<h1 id="windows下创建文件"><a href="#windows下创建文件" class="headerlink" title="windows下创建文件"></a>windows下创建文件</h1><p>Pass-04 这一关主要考察了 <code>.htaccess</code> 的利用</p>
+<p>由于黑名单没有过滤掉 <code>.htaccess</code> ,所以我们能够上传<code>.htaccess</code> 文件导致其后上传的其他文件能够解析成 php，从而拿到shell</p>
+<p>但是我在 windows 上直接创建 <code>.htaccess</code> 时会弹窗报错，告知必须输入文件名</p>
+<p><img src="https://i.loli.net/2019/07/23/5d36d43aa7e2666844.png" alt></p>
+<p>因为我们输入的是 <code>.htaccess</code> ，猜测 windows 把它当做了是一个文件的后缀名，所以提示我们输入文件前面的名字</p>
+<p>那么为什么不能这样进行创建呢？<br>具体可见：The Old New Thing： <a href="https://devblogs.microsoft.com/oldnewthing/?p=22763" target="_blank" rel="noopener">https://devblogs.microsoft.com/oldnewthing/?p=22763</a></p>
+<p>当时就直接改成 <code>.htaccess.txt</code> 了，然后通过传统的办法，利用 burpsuite 抓包改包。重新改为 <code>.htaccess</code></p>
+<p><img src="https://i.loli.net/2019/07/23/5d36d5a248c7a79821.png" alt></p>
+<p>但是后知后觉的了解了一下 windows 的特性，发现有如下解决办法</p>
+<p><strong>方法一：</strong></p>
+<p>弹窗提示的原因是因为没有文件名，那么我们创建 <code>.htaccess.</code></p>
+<p>windows又会自动的忽略掉后面的 <code>.</code> 而成功创建</p>
+<p><img src="https://i.loli.net/2019/07/23/5d36d6668c27882365.png" alt></p>
+<br>
+
+<p><strong>方法二：</strong></p>
+<p>命令行窗口 + echo命令</p>
+<p>开启命令行窗口，直接在命令行窗口输入 <code>echo [你要输入的文字] &gt; .htaccess</code></p>
+<p><img src="https://i.loli.net/2019/07/23/5d36d74a266a555716.png" alt></p>
+<p>不仅能成功创建，还能直接将内容输入进文件内</p>
+<p><img src="https://i.loli.net/2019/07/23/5d36d78e33c8917855.png" alt></p>
+<h1 id="黑名单与上传的文件名"><a href="#黑名单与上传的文件名" class="headerlink" title="黑名单与上传的文件名"></a>黑名单与上传的文件名</h1><h3 id="什么是-Windows-特性"><a href="#什么是-Windows-特性" class="headerlink" title="什么是 Windows 特性"></a>什么是 Windows 特性</h3><p>主要探究创建文件时的windows特性…</p>
+<p>网上找了一圈资料没发现有具体的描述，看了upload-labs的一些其他writeup，发现里面都是一句，由windows特性可知…<br>我也不知道核心原理是什么，我就自行探索一下，有错误的地方大佬们请批评指正</p>
+<p>系统：windows10旗舰版</p>
+<p><strong>创建文件 <code>1.php</code> ——》 设置为参照物</strong></p>
+<p><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+
+<p><strong>创建文件 <code>1.php.</code> ——》进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><strong>且无论后面加多少个<code>.</code> ——》均进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png" alt><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+<p><strong>创建文件 <code>1.php[空格]</code> ——》直接变为 <code>1.php</code></strong><br><strong>且无论后面加多少个空格 ——》均直接变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+<p><strong>创建文件 <code>1.php[空格].</code> ——》进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png" alt><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+
+<p><strong>创建文件 <code>1.php.[空格]</code> ——》进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png" alt><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+<p><strong>创建文件 <code>1.php.[空格]</code> ——》进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png" alt><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+<p><strong>创建文件 <code>1.php.[空格].</code> ——》进行一次弹窗 ——》确定更改后变为 <code>1.php</code></strong><br><img src="https://i.loli.net/2019/07/23/5d36f6a686e2b40180.png" alt><br><img src="https://i.loli.net/2019/07/23/5d36f66dd710c85507.png" alt></p>
+<br>
+
+<p><strong>然后尝试在文件后面不断循环几次 <code>.</code>和空格</strong><br><strong>最后就不断弹窗，删除不了文件也没法重命名，打不开任何文件，只要点击鼠标就会弹窗（仿佛被植入xss…</strong><br><strong>最后通过重启电脑解决</strong><br><img src="https://i.loli.net/2019/07/23/5d36fbe0289cf81488.png" alt><br><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190730092047-42c919fc-b268-1.gif" alt></p>
+<h3 id="Pass-5、6、7、9关"><a href="#Pass-5、6、7、9关" class="headerlink" title="Pass 5、6、7、9关"></a>Pass 5、6、7、9关</h3><p>问：为什么要研究windows创建文件的特性？<br>答：通过windows特性，我们就是为了构造出一些特殊的文件名，既能绕过waf，又使php文件能正常解析</p>
+<p>先贴一个针对5,6,7,9关过滤相对完全的代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$is_upload = <span class="keyword">false</span>;</span><br><span class="line">$msg = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'submit'</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file_exists(UPLOAD_PATH)) &#123;</span><br><span class="line">        $deny_ext = <span class="keyword">array</span>(<span class="string">".php"</span>,<span class="string">".php5"</span>,<span class="string">".php4"</span>,<span class="string">".php3"</span>,<span class="string">".php2"</span>,<span class="string">".html"</span>,<span class="string">".htm"</span>,<span class="string">".phtml"</span>,<span class="string">".pht"</span>,<span class="string">".pHp"</span>,<span class="string">".pHp5"</span>,<span class="string">".pHp4"</span>,<span class="string">".pHp3"</span>,<span class="string">".pHp2"</span>,<span class="string">".Html"</span>,<span class="string">".Htm"</span>,<span class="string">".pHtml"</span>,<span class="string">".jsp"</span>,<span class="string">".jspa"</span>,<span class="string">".jspx"</span>,<span class="string">".jsw"</span>,<span class="string">".jsv"</span>,<span class="string">".jspf"</span>,<span class="string">".jtml"</span>,<span class="string">".jSp"</span>,<span class="string">".jSpx"</span>,<span class="string">".jSpa"</span>,<span class="string">".jSw"</span>,<span class="string">".jSv"</span>,<span class="string">".jSpf"</span>,<span class="string">".jHtml"</span>,<span class="string">".asp"</span>,<span class="string">".aspx"</span>,<span class="string">".asa"</span>,<span class="string">".asax"</span>,<span class="string">".ascx"</span>,<span class="string">".ashx"</span>,<span class="string">".asmx"</span>,<span class="string">".cer"</span>,<span class="string">".aSp"</span>,<span class="string">".aSpx"</span>,<span class="string">".aSa"</span>,<span class="string">".aSax"</span>,<span class="string">".aScx"</span>,<span class="string">".aShx"</span>,<span class="string">".aSmx"</span>,<span class="string">".cEr"</span>,<span class="string">".sWf"</span>,<span class="string">".swf"</span>,<span class="string">".htaccess"</span>);</span><br><span class="line">        $file_name = $_FILES[<span class="string">'upload_file'</span>][<span class="string">'name'</span>];</span><br><span class="line">        $file_name = deldot($file_name);<span class="comment">//删除文件名末尾的点</span></span><br><span class="line">        $file_ext = strrchr($file_name, <span class="string">'.'</span>);</span><br><span class="line">        $file_ext = strtolower($file_ext); <span class="comment">//转换为小写</span></span><br><span class="line">        $file_ext = str_ireplace(<span class="string">'::$DATA'</span>, <span class="string">''</span>, $file_ext);<span class="comment">//去除字符串::$DATA</span></span><br><span class="line">		$file_ext = trim($file_ext); <span class="comment">//首尾去空</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            $temp_file = $_FILES[<span class="string">'upload_file'</span>][<span class="string">'tmp_name'</span>];</span><br><span class="line">            $img_path = UPLOAD_PATH.<span class="string">'/'</span>.date(<span class="string">"YmdHis"</span>).rand(<span class="number">1000</span>,<span class="number">9999</span>).$file_ext;</span><br><span class="line">            <span class="keyword">if</span> (move_uploaded_file($temp_file,$img_path)) &#123;</span><br><span class="line">                $is_upload = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                $msg = <span class="string">'上传出错！'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">'此文件不允许上传'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = UPLOAD_PATH . <span class="string">'文件夹不存在,请手工创建！'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>针对上述相对过滤完全的代码，在<strong>没有中间件漏洞</strong>的情况下，对于我这种菜鸡来说还是难以突破的（大佬们可以指点一下…</p>
+<p>先说一下 Pass-05<br>它的源码中缺少 <code>$file_ext = strtolower($file_ext); //转换为小写</code> 这一个过滤</p>
+<p>所以常规的后缀名大小写混写就可以绕过黑名单的限制</p>
+<p><code>.php</code> ——》 <code>.phP</code></p>
+<br>
+
+
+
+<p>再说一下 Pass-06<br>它的源码中缺少 <code>$file_ext = trim($file_ext); //首尾去空</code> 这个过滤点</p>
+<p>所以我们构造 <code>ma.php[空格]</code>，上传后经过滤如下</p>
+<p><img src="https://i.loli.net/2019/07/23/5d37034b6535e13055.png" alt></p>
+<p>然后成功创建文件<br><img src="https://i.loli.net/2019/07/23/5d3703abcd78978539.png" alt></p>
+<br>
+
+
+<p>再看一下 Pass-07<br>它的源码中缺少 <code>$file_name = deldot($file_name);//删除文件名末尾的点</code> 这个过滤点</p>
+<p>所以我们构造 <code>ma.php.</code>，上传后经过滤如下</p>
+<p><img src="https://i.loli.net/2019/07/23/5d37114e7d6df90788.png" alt></p>
+<p>最后通过windows的特性变为 <code>ma.php</code></p>
+<p><img src="https://i.loli.net/2019/07/23/5d3711a581fb860689.png" alt></p>
+<br>
+
+
+<p>可能是因为做了6,7关（特别是第7关），突然好像有所顿悟，又回头看了看第5关…</p>
+<p><strong>于是有了下面的错误思路</strong></p>
+<p>回去再次读了一遍第5关的源码后发现只对 <code>.</code> 做出了一次过滤</p>
+<p>那么我们可以传入 <code>ma.php.[空格].</code>于是在幻想中，过滤情形应该是这样的</p>
+<p><img src="https://i.loli.net/2019/07/23/5d3713b59c20928903.png" alt></p>
+<p><strong>结果…</strong></p>
+<p><img src="https://i.loli.net/2019/07/23/5d3713fd32c5072944.png" alt></p>
+<p>所以说实际情况是</p>
+<p><img src="https://i.loli.net/2019/07/23/5d3714f03779543742.png" alt></p>
+<p>因为strrchr()函数的原因，所以中间件漏洞可以在此成功利用<br><a href="http://www.w3school.com.cn/php/func_string_strrchr.asp" target="_blank" rel="noopener">PHP strrchr() 函数</a><br><a href="https://www.anquanke.com/post/id/166616" target="_blank" rel="noopener">部分中间件漏洞总结</a></p>
+<p><strong>第 9 关就不一样</strong><br>第 9 关拼接的路径为 <code>$img_path = UPLOAD_PATH.&#39;/&#39;.$file_name;</code><br>所以采用上面的办法可以很顺利的完成绕过</p>
+<p>补：deldot函数从后向前检测，当检测到末尾的第一个点时会继续它的检测，但是遇到空格会停下来</p>
+<p>对比一下 Pass-05 和 Pass-09 会发现，Pass-09之所以能够成功执行的原因是因为他所拼接的文件路径是最开始读到的文件名</p>
+<p><img src="https://i.loli.net/2019/07/23/5d3719710712c32958.png" alt></p>
+<p>不难看出问题的关键还是拼接路径的方式，如果是拼接最开始读取到的文件名，显然是极其不安全的</p>
+<h1 id="magic-quotes-gpc的开关"><a href="#magic-quotes-gpc的开关" class="headerlink" title="magic_quotes_gpc的开关"></a>magic_quotes_gpc的开关</h1><p>以及第11关使用%00截断的时候</p>
+<p><img src="https://i.loli.net/2019/07/24/5d3801e9590ee96752.png" alt></p>
+<p>如果 magic_quotes_gpc 选项是开启的话，会造成上传图片失败</p>
+<p><img src="https://i.loli.net/2019/07/24/5d38031fb21d647525.png" alt></p>
+<p>而百度和谷歌对 magic_quotes_gpc 的介绍都着重偏向数据库方面，都是为了防止sql注入，但是有一段内容说了magic_quotes_gpc开启会对$_REQUEST, $_GET,$_POST,$_COOKIE 输入的内容进行过滤</p>
+<p>这里猜测是因为 %00 被解析成了空，所以造成在预定义字符前面加上了反斜线，因此构造的路径改变，导致上传错误</p>
+<p><img src="https://i.loli.net/2019/07/24/5d38046992ef917543.png" alt></p>
+<p>关闭后即可正常上传，由于具体原因只是推测，所以没有写上去，如果不对，请师傅们批评指正</p>
+<h1 id="二次渲染？"><a href="#二次渲染？" class="headerlink" title="二次渲染？"></a>二次渲染？</h1><p>对这个的思考来源于Pass-16 和一篇先知的文章：<a href="https://xz.aliyun.com/t/2657" target="_blank" rel="noopener">upload-labs之pass 16详细分析</a></p>
+<p>贴上它的源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">$is_upload = <span class="keyword">false</span>;</span><br><span class="line">$msg = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'submit'</span>]))&#123;</span><br><span class="line">    <span class="comment">// 获得上传文件的基本信息，文件名，类型，大小，临时文件路径</span></span><br><span class="line">    $filename = $_FILES[<span class="string">'upload_file'</span>][<span class="string">'name'</span>];</span><br><span class="line">    $filetype = $_FILES[<span class="string">'upload_file'</span>][<span class="string">'type'</span>];</span><br><span class="line">    $tmpname = $_FILES[<span class="string">'upload_file'</span>][<span class="string">'tmp_name'</span>];</span><br><span class="line"></span><br><span class="line">    $target_path=UPLOAD_PATH.<span class="string">'/'</span>.basename($filename);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获得上传文件的扩展名</span></span><br><span class="line">    $fileext= substr(strrchr($filename,<span class="string">"."</span>),<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断文件后缀与类型，合法才进行上传操作</span></span><br><span class="line">    <span class="keyword">if</span>(($fileext == <span class="string">"jpg"</span>) &amp;&amp; ($filetype==<span class="string">"image/jpeg"</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($tmpname,$target_path))&#123;</span><br><span class="line">            <span class="comment">//使用上传的图片生成新的图片</span></span><br><span class="line">            $im = imagecreatefromjpeg($target_path);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>($im == <span class="keyword">false</span>)&#123;</span><br><span class="line">                $msg = <span class="string">"该文件不是jpg格式的图片！"</span>;</span><br><span class="line">                @unlink($target_path);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">//给新图片指定文件名</span></span><br><span class="line">                srand(time());</span><br><span class="line">                $newfilename = strval(rand()).<span class="string">".jpg"</span>;</span><br><span class="line">                <span class="comment">//显示二次渲染后的图片（使用用户上传图片生成的新图片）</span></span><br><span class="line">                $img_path = UPLOAD_PATH.<span class="string">'/'</span>.$newfilename;</span><br><span class="line">                imagejpeg($im,$img_path);</span><br><span class="line">                @unlink($target_path);</span><br><span class="line">                $is_upload = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">"上传出错！"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(($fileext == <span class="string">"png"</span>) &amp;&amp; ($filetype==<span class="string">"image/png"</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($tmpname,$target_path))&#123;</span><br><span class="line">            <span class="comment">//使用上传的图片生成新的图片</span></span><br><span class="line">            $im = imagecreatefrompng($target_path);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>($im == <span class="keyword">false</span>)&#123;</span><br><span class="line">                $msg = <span class="string">"该文件不是png格式的图片！"</span>;</span><br><span class="line">                @unlink($target_path);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                 <span class="comment">//给新图片指定文件名</span></span><br><span class="line">                srand(time());</span><br><span class="line">                $newfilename = strval(rand()).<span class="string">".png"</span>;</span><br><span class="line">                <span class="comment">//显示二次渲染后的图片（使用用户上传图片生成的新图片）</span></span><br><span class="line">                $img_path = UPLOAD_PATH.<span class="string">'/'</span>.$newfilename;</span><br><span class="line">                imagepng($im,$img_path);</span><br><span class="line"></span><br><span class="line">                @unlink($target_path);</span><br><span class="line">                $is_upload = <span class="keyword">true</span>;               </span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">"上传出错！"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(($fileext == <span class="string">"gif"</span>) &amp;&amp; ($filetype==<span class="string">"image/gif"</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($tmpname,$target_path))&#123;</span><br><span class="line">            <span class="comment">//使用上传的图片生成新的图片</span></span><br><span class="line">            $im = imagecreatefromgif($target_path);</span><br><span class="line">            <span class="keyword">if</span>($im == <span class="keyword">false</span>)&#123;</span><br><span class="line">                $msg = <span class="string">"该文件不是gif格式的图片！"</span>;</span><br><span class="line">                @unlink($target_path);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">//给新图片指定文件名</span></span><br><span class="line">                srand(time());</span><br><span class="line">                $newfilename = strval(rand()).<span class="string">".gif"</span>;</span><br><span class="line">                <span class="comment">//显示二次渲染后的图片（使用用户上传图片生成的新图片）</span></span><br><span class="line">                $img_path = UPLOAD_PATH.<span class="string">'/'</span>.$newfilename;</span><br><span class="line">                imagegif($im,$img_path);</span><br><span class="line"></span><br><span class="line">                @unlink($target_path);</span><br><span class="line">                $is_upload = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">"上传出错！"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $msg = <span class="string">"只允许上传后缀为.jpg|.png|.gif的图片文件！"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>先知这篇文章中提到：<br>在这里有一个问题,如果作者是想考察绕过二次渲染的话,在move_uploaded_file($tmpname,$target_path)返回true的时候,就已经成功将图片马上传到服务器了,所以下面的二次渲染并不会影响到图片马的上传.如果是想考察文件后缀和content-type的话,那么二次渲染的代码就很多余.(到底考点在哪里,只有作者清楚.哈哈)</p>
+</blockquote>
+<p>先知的文章将过程写的很详细，想到了不久之前的 DDCTF 中也有一道二次渲染的考题</p>
+<p>DDCTF中的 Upload-IMG 这题，设计到了GD库的二次渲染，通过一个小脚本即可绕过：<a href="https://wiki.ioin.in/soft/detail/1q" target="_blank" rel="noopener">绕过GD库渲染的WEBSHELL生成器</a></p>
+<blockquote>
+<p>官方的writeup如下<br>经验就是<br>1、图片找的稍微大一点 成功率更高<br>2、shell语句越短成功率越高<br>3、一张图片不行就换一张 不要死磕<br>4、可以把gd处理的图片再用工具跑一遍再传</p>
+</blockquote>
+<h1 id="imagemagick-邂逅-getimagesize"><a href="#imagemagick-邂逅-getimagesize" class="headerlink" title="imagemagick 邂逅 getimagesize"></a>imagemagick 邂逅 getimagesize</h1><p>Pass-14 中涉及到了 getimagesize</p>
+<p>getimagesize() 函数将测定任何 GIF，JPG，PNG，SWF，SWC，PSD，TIFF，BMP，IFF，JP2，JPX，JB2，JPC，XBM 或 WBMP 图像文件的大小并返回图像的尺寸以及文件类型及图片高度与宽度。</p>
+<p>前端时间P牛更新了他的博客，<a href="https://www.leavesongs.com/PENETRATION/when-imagemagick-meet-getimagesize.html" target="_blank" rel="noopener">imagemagick邂逅getimagesize的那点事儿</a>: <a href="https://www.leavesongs.com/PENETRATION/when-imagemagick-meet-getimagesize.html" target="_blank" rel="noopener">https://www.leavesongs.com/PENETRATION/when-imagemagick-meet-getimagesize.html</a></p>
+<p>有兴趣的大佬们可以深究一下…</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>P2hm1n</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://p2hm1n.github.io/2019/07/30/由Upload-labs的几关引发的思考/" title="由Upload-labs的几关引发的思考">https://p2hm1n.github.io/2019/07/30/由Upload-labs的几关引发的思考/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Writeup/" rel="tag"># Writeup</a>
+          
+            <a href="/tags/File-Upload/" rel="tag"># File Upload</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/30/Upload-labs-Writeup/" rel="next" title="通过 Upload-labs 掌握文件上传漏洞">
+                <i class="fa fa-chevron-left"></i> 通过 Upload-labs 掌握文件上传漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="gitalk-container">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/lufei.jpg" alt="P2hm1n">
+            
+              <p class="site-author-name" itemprop="name">P2hm1n</p>
+              <div class="site-description motion-element" itemprop="description">ONE PIECE</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">29</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/P2hm1n" title="GitHub &rarr; https://github.com/P2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/qq7832919@gmail.com" title="E-Mail &rarr; qq7832919@gmail.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/p2hm1n" title="Twitter &rarr; https://twitter.com/p2hm1n" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.d0g3.cn/about?tdsourcetag=s_pctim_aiomsg#" title="https://www.d0g3.cn/about?tdsourcetag=s_pctim_aiomsg#" rel="noopener" target="_blank">D0g3 Family</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#windows下创建文件"><span class="nav-number">2.</span> <span class="nav-text">windows下创建文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#黑名单与上传的文件名"><span class="nav-number">3.</span> <span class="nav-text">黑名单与上传的文件名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-Windows-特性"><span class="nav-number">3.0.1.</span> <span class="nav-text">什么是 Windows 特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pass-5、6、7、9关"><span class="nav-number">3.0.2.</span> <span class="nav-text">Pass 5、6、7、9关</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#magic-quotes-gpc的开关"><span class="nav-number">4.</span> <span class="nav-text">magic_quotes_gpc的开关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二次渲染？"><span class="nav-number">5.</span> <span class="nav-text">二次渲染？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#imagemagick-邂逅-getimagesize"><span class="nav-number">6.</span> <span class="nav-text">imagemagick 邂逅 getimagesize</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">P2hm1n</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">237k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:35</span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+
+
+<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+<script>
+  var gitalk = new Gitalk({
+    clientID: '355064866eb0a9c2de67',
+    clientSecret: '2e624255d41f832c93f2b3d8d828ecb1020eac9c',
+    repo: 'P2hm1n.github.io',
+    owner: 'P2hm1n',
+    admin: ['P2hm1n'],
+    id: md5(location.pathname),
+    
+      language: 'zh-CN',
+    
+    distractionFreeMode: 'true'
+  });
+  gitalk.render('gitalk-container');
+</script>
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'WtWopjB21xY5x2nLDalLtCkR-gzGzoHsz',
+                'X-LC-Key': 'IAjulOwXptsNYDpFKJrSDdq6',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/js/wobblewindow.js"></script>
+  <script>
+    //只在桌面版网页启用特效
+    if( window.innerWidth > 768  ){
+      $(document).ready(function () {
+        
+          $('#header').wobbleWindow({
+            radius: 50,
+            movementTop: false,
+            movementLeft: false,
+            movementRight: false,
+            debug: false,
+          });
+        
+
+        
+          $('#sidebar').wobbleWindow({
+            radius: 50,
+            movementLeft: false,
+            movementTop: false,
+            movementBottom: false,
+            position: 'fixed',
+            debug: false,
+          });
+        
+
+        
+          $('#footer').wobbleWindow({
+            radius: 50,
+            movementBottom: false,
+            movementLeft: false,
+            movementRight: false,
+            offsetX: ,
+            position: 'absolute',
+            debug: false,
+          });
+        
+      });
+    }
+  </script>
+
+
+
+
+  <script src="/js/activate-power-mode.min.js"></script>
+  <script>
+    POWERMODE.colorful = true;
+    POWERMODE.shake = false;
+    document.body.addEventListener('input', POWERMODE);
+  </script>
+
+
+<script type="text/javascript" src="/js/love.js"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+</html>
